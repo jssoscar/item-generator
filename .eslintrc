@@ -1,0 +1,10 @@
+{
+    "extends": "react-app",
+    "rules": {
+        "no-script-url": 0,
+        "eqeqeq": 0, //全等关闭
+        "jsx-a11y/anchor-is-valid": "off",
+        "no-useless-escape": "off",
+        "no-eval": "off"
+    }
+}
