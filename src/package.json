@@ -1,0 +1,22 @@
+{
+    "name": "item-generator",
+    "version": "0.6.3",
+    "description": "基于antd 3的react表单配置方案",
+    "main": "src/index.js",
+    "title": "item-generator",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:jssoscar/item-generator.git"
+    },
+    "keywords": [
+        "ItemGenerator",
+        "react-form",
+        "item generator"
+    ],
+    "author": "jssoscar",
+    "typings": "index.d.ts",
+    "license": "ISC"
+}

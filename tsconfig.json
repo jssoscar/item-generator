@@ -1,26 +1,25 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "downlevelIteration": true,
-        "allowJs": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "module": "esnext",
+        "strictNullChecks": true,
         "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
-        "jsx": "react",
-        "noImplicitAny": false,
+        "allowJs": true /** 允许编译javascript文件 */,
+        "skipLibCheck": true /** 忽略所有的声明文件（ *.d.ts）的类型检查 */,
+        "module": "esnext" /** 指定生成哪个模块系统代码 */,
         "experimentalDecorators": true,
-        "baseUrl": "src",
-        "paths": {
-            "@*": ["*"]
-        }
+        "strictFunctionTypes": false,
+        "jsx": "react",
+        "noUnusedParameters": true,
+        "sourceMap": false,
+        "strict": false,
+        "noUnusedLocals": false,
+        "target": "es5",
+        "outDir": "./dist",
+        "noImplicitAny": false,
+        "lib": ["dom", "es2015", "es2017", "es2017.object"],
+        "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
+        "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */
     },
-    "include": ["src"]
+    "module": "ESNext",
+    "exclude": ["node_modules"],
+    "include": ["./src/**/*"]
 }

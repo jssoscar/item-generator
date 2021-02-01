@@ -151,6 +151,7 @@ const transformReg = (data: Config) => {
                     let flags;
                     let regex = string;
                     // 获取flags
+                    // @ts-ignore
                     regex = regex.replace(/([gimyu]{0,5})$/, ($0, $1) => {
                         flags = $1;
                         return '';
@@ -231,6 +232,7 @@ export const transformConfig = (form: any, config: Config[], logicMap: LogicMap 
                     return test(form) === true;
                 } else {
                     // 替换表达式
+                    // @ts-ignore
                     const expression = `${test}`.replace(/(\{([^\}]+)})/g, ($1, $2, name) => {
                         /**
                          * 这里会出现，数组类型数据
