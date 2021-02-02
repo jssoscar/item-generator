@@ -1,6 +1,6 @@
 {
     "name": "item-generator",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "description": "基于antd 3的react表单配置方案",
     "main": "src/index.js",
     "title": "item-generator",
@@ -18,5 +18,9 @@
     ],
     "author": "jssoscar",
     "typings": "index.d.ts",
-    "license": "ISC"
+    "license": "MIT",
+    "dependencies": {
+        "moment": "*"
+    },
+    "devDependencies": {}
 }

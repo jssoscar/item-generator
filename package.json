@@ -11,7 +11,7 @@
   "scripts": {
     "start": "node --max_old_space_size=8192 scripts/start.js",
     "dev": "node --max_old_space_size=8192 scripts/start.js --proxy http://127.0.0.1",
-    "build": "node --max_old_space_size=8192 scripts/build.js",
+    "build": "tsc && gulp copy",
     "test": "node scripts/test.js",
     "build:analyzer": "ANALYZE=true node scripts/build.js",
     "build:speed": "SPEED_MEASURE=true node scripts/build.js",
@@ -138,6 +138,7 @@
     "eslint-plugin-react-hooks": "^1.6.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fs-extra": "^8.1.0",
+    "gulp": "^4.0.2",
     "hard-source-webpack-plugin": "^0.13.1",
     "html-webpack-plugin": "4.0.0-beta.11",
     "identity-obj-proxy": "3.0.0",
