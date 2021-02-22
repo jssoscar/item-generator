@@ -17,7 +17,7 @@ let REGISTERTED_COMPONENT = {};
  * @param Comp ： 自定义组件
  * @param isHookComponent : 是否为hooks类型component
  */
-export const register = (type: string, Comp, isHookComponent?: false) => {
+export const register = (type: string, Comp, isHookComponent: boolean = false) => {
     if (!type || !Comp) {
         return null;
     }

@@ -58,7 +58,7 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 const lessRegex = /\.less$/;
 const lessModuleRegex = /\.module\.less$/;
 
-const getPath = name => path.resolve(__dirname, name);
+const getPath = (name) => path.resolve(__dirname, name);
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -189,9 +189,10 @@ module.exports = function (webpackEnv) {
             publicPath: paths.publicUrlOrPath,
             // Point sourcemap entries to original disk location (format as URL on Windows)
             devtoolModuleFilenameTemplate: isEnvProduction
-                ? info => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
+                ? (info) =>
+                      path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
                 : isEnvDevelopment &&
-                  (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+                  ((info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
             // Prevents conflicts when multiple webpack runtimes (from different apps)
             // are used on the same page.
             jsonpFunction: `webpackJsonp${appPackageJson.name}`,
@@ -274,7 +275,7 @@ module.exports = function (webpackEnv) {
             // https://twitter.com/wSokra/status/969679223278505985
             // https://github.com/facebook/create-react-app/issues/5358
             runtimeChunk: {
-                name: entrypoint => `runtime-${entrypoint.name}`
+                name: (entrypoint) => `runtime-${entrypoint.name}`
             }
         },
         resolve: {
@@ -292,8 +293,8 @@ module.exports = function (webpackEnv) {
             // `web` extension prefixes have been added for better support
             // for React Native Web.
             extensions: paths.moduleFileExtensions
-                .map(ext => `.${ext}`)
-                .filter(ext => useTypeScript || !ext.includes('ts')),
+                .map((ext) => `.${ext}`)
+                .filter((ext) => useTypeScript || !ext.includes('ts')),
             alias: {
                 // Support React Native Web
                 // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -333,7 +334,7 @@ module.exports = function (webpackEnv) {
                 // First, run the linter.
                 // It's important to do this before Babel processes the JS.
                 {
-                    test: /\.(js|mjs|jsx|ts|tsx)$/,
+                    test: /\.(js|mjs|jsx)$/,
                     enforce: 'pre',
                     use: [
                         {
@@ -346,7 +347,8 @@ module.exports = function (webpackEnv) {
                             loader: require.resolve('eslint-loader')
                         }
                     ],
-                    include: paths.appSrc
+                    include: [paths.appDemo, paths.appSrc],
+                    exclude: paths.appNodeModules
                 },
                 {
                     // "oneOf" will traverse all following loaders until one will
@@ -367,7 +369,23 @@ module.exports = function (webpackEnv) {
                         // Process application JS with Babel.
                         // The preset includes JSX, Flow, TypeScript, and some ESnext features.
                         {
-                            test: /\.(js|mjs|jsx|ts|tsx)$/,
+                            test: /\.(tsx|ts)$/,
+                            include: [paths.appSrc],
+                            exclude: paths.appNodeModules,
+                            use: [
+                                {
+                                    loader: 'ts-loader',
+                                    options: {
+                                        transpileOnly: true,
+                                        compilerOptions: {
+                                            module: 'es2015'
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            test: /\.(js|mjs|jsx)$/,
                             include: [paths.appDemo, paths.appSrc],
                             exclude: paths.appNodeModules,
                             // loader: require.resolve('babel-loader'),
@@ -658,7 +676,7 @@ module.exports = function (webpackEnv) {
                         return manifest;
                     }, seed);
                     const entrypointFiles = entrypoints.main.filter(
-                        fileName => !fileName.endsWith('.map')
+                        (fileName) => !fileName.endsWith('.map')
                     );
 
                     return {

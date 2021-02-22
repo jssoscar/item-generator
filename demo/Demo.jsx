@@ -24,24 +24,20 @@ setGlobalConfig({
         bordered: true
     },
     emptyText: '--',
-    logic: {
-        inputRequied: [
-            {
-                test: true,
-                item: {
-                    options: {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入'
-                            }
-                        ]
-                    }
+    baseItemConfig: {
+        inputRequired: {
+            item: {
+                options: {
+                    rules: [
+                        {
+                            required: true,
+                            message: '请输入'
+                        }
+                    ]
                 }
             }
-        ],
+        },
         selectRequired: {
-            test: true,
             item: {
                 options: {
                     rules: [
@@ -141,7 +137,7 @@ class Test extends PureComponent {
                             ]
                         }
                     },
-                    logic: 'nameRequired'
+                    logic: 'nameNotRequired'
                 },
                 {
                     item: {
@@ -224,7 +220,7 @@ class Test extends PureComponent {
                             pleaseSelValue: -1
                         }
                     },
-                    logic: 'selectRequired'
+                    extends: 'selectRequired'
                 },
                 {
                     item: {
@@ -236,7 +232,7 @@ class Test extends PureComponent {
                             mode: 'multiple'
                         }
                     },
-                    logic: 'selectRequired'
+                    extends: 'selectRequired'
                 },
                 {
                     item: {
@@ -248,7 +244,7 @@ class Test extends PureComponent {
                             shouldOptionDisabled: (val) => val == 2
                         }
                     },
-                    logic: 'selectRequired'
+                    extends: 'selectRequired'
                 },
                 {
                     item: {
@@ -260,7 +256,7 @@ class Test extends PureComponent {
                             optGroup: true
                         }
                     },
-                    logic: 'selectRequired'
+                    extends: 'selectRequired'
                 },
                 {
                     item: {
@@ -460,21 +456,19 @@ class Test extends PureComponent {
             },
             colable,
             logic: {
-                nameRequired: [
-                    {
-                        test: '{age} == 1',
-                        item: {
-                            options: {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入'
-                                    }
-                                ]
-                            }
+                nameNotRequired: {
+                    test: '{age} == 1',
+                    item: {
+                        options: {
+                            rules: [
+                                {
+                                    required: false,
+                                    message: '请输入'
+                                }
+                            ]
                         }
                     }
-                ]
+                }
             }
         };
 
