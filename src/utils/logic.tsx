@@ -6,8 +6,8 @@
  * @Description
  */
 
-import { Config, LogicMap } from '../components/ItemProps';
-import { getGlobalConfig } from './globalConfig';
+import { Config, Options } from '../components/ItemProps';
+import { getGlobalConfig } from '../utils/globalConfig';
 
 const hasOwn = Object.prototype.hasOwnProperty;
 const toStr = Object.prototype.toString;
@@ -189,43 +189,69 @@ const transformReg = (data: Config) => {
  * @param config ：表单配置
  * @param logicMap: 顶层配置级联规则
  */
-export const transformConfig = (form: any, config: Config[], logicMap: LogicMap = {}) => {
+export const transformConfig = (form: any, config: Config[], options: Options) => {
+    const globalConfig = getGlobalConfig();
+
     return config.map((data) => {
-        const { logic = '' } = data;
+        let extendedData = extend(true, {}, data);
+
+        // 元素继承基础配置
+        if (extendedData.extends) {
+            const middleExetends = Array.isArray(extendedData.extends)
+                ? extendedData.extends
+                : [extendedData.extends];
+
+            middleExetends.forEach((cur) => {
+                const config = {
+                    ...(globalConfig.baseItemConfig || {})[cur],
+                    ...(options.extends || {})[cur]
+                };
+
+                extendedData = extend(true, extendedData, config);
+            });
+        }
+
         // 无级联逻辑，则返回原始数据
         const realLogic = (() => {
-            // 数组类型配置
-            if (Array.isArray(logic)) {
-                return logic;
+            const { logic } = extendedData;
+            // 未配置级联规则
+            if (logic == undefined) {
+                return;
             }
 
-            // string类型： 获取配置规则
+            let realLogic: any = logic;
+            // string | object类型抹平为数组类型
             if (typeof logic === 'string') {
-                const globalConfig = getGlobalConfig();
-                const realLogicMap = {
-                    ...globalConfig.logic,
-                    ...logicMap
-                };
-                const result = realLogicMap[logic];
-
-                // 未配置规则
-                if (result == undefined) {
-                    return undefined;
-                }
-
-                return Array.isArray(result) ? result : [result];
+                realLogic = [logic];
+            } else if (!Array.isArray(logic)) {
+                realLogic = [logic];
             }
 
-            return [logic];
+            let result: any = [];
+            // 遍历所有级联配置，转化成统一数组对象
+            realLogic.forEach((val) => {
+                if (typeof val === 'string') {
+                    const config = (options.logic || {})[val];
+                    // 未配置规则
+                    if (config == undefined) {
+                        return;
+                    }
+                    Array.isArray(config) ? (result = [...result, ...config]) : result.push(config);
+                } else {
+                    result.push(val);
+                }
+            });
+
+            return result.filter((val) => val);
         })();
 
-        if (!Array.isArray(realLogic)) {
-            return transformReg(data);
+        if (!Array.isArray(realLogic) || realLogic.length === 0) {
+            return transformReg(extendedData);
         }
 
         // 获取匹配级联规则
-        const fitRules = realLogic.filter((data) => {
-            const { test } = data;
+        const fitRules = realLogic.filter((cur) => {
+            const { test } = cur;
             try {
                 // 执行自定义规则
                 if (isFunction(test)) {
@@ -251,16 +277,16 @@ export const transformConfig = (form: any, config: Config[], logicMap: LogicMap 
 
         // 未匹配到级联规则
         if (!fitRules.length) {
-            return transformReg(data);
+            return transformReg(extendedData);
         }
 
         // 从后往前合并 ： 前置规则优先级更高
-        const { rule, ...mergedConfig }: Config = [...fitRules].reverse().reduce((prev, next) => {
+        const { test, ...mergedConfig }: Config = [...fitRules].reverse().reduce((prev, next) => {
             prev = extend(true, {}, prev, next);
             return prev;
         }, {} as Config);
 
         // 合并原始配置与更新后配置
-        return transformReg(extend(true, {}, data, mergedConfig));
+        return transformReg(extend(true, {}, extendedData, mergedConfig));
     });
 };

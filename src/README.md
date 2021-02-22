@@ -3,6 +3,15 @@
 
 ## Changelog
 
+### 0.6.6
+
+-   级联：优化string/object/(string|object)[]类型配置处理
+
+### 0.6.5
+
+-   全局配置： 将logic改为baseItemConfig，提供全局表单元素配置合并
+
+-   级联：支持string/object/(string|object)[]类型配置
 ### 0.6.4
 
 -   修复.d.ts导出异常的bug

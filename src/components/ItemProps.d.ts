@@ -64,7 +64,9 @@ export interface Config extends Empty {
     /** 是否展示当前元素，默认：true */
     show?: boolean;
     /** 元素级联逻辑配置 */
-    logic?: string | Logic[] | Logic;
+    logic?: string | string[] | Logic | Logic[];
+    /** 继承基础配置 */
+    extends?: string | string[];
 }
 
 /** 级联对象逻辑 */
@@ -92,14 +94,18 @@ export interface Options extends Empty {
     emptyText?: string;
     /** 是否以Col封装：默认为false */
     colable?: boolean;
-    /** 表单数据，只有当编辑/查看状态，会使用数据进行初始化 */
+    /** 表单数据，会使用数据进行初始化 */
     data?: Empty;
     /** 页面状态， 0：查看，1：编辑。默认为 1 - 新增状态 */
     status?: Status;
     /** 表单配置项 */
     config: Config[];
     /** 级联map规则 */
-    logic?: LogicMap
+    logic?: LogicMap;
+    /** 元素继承配置 */
+    extends?: {
+        [key: string]: Config
+    }
 }
 
 export interface ItemProps extends Empty {

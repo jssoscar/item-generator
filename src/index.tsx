@@ -1,8 +1,8 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:58:58 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:58:58
+ * @Version			1.0
+ * @Description
  */
 
 import React, { PureComponent } from 'react';
@@ -24,7 +24,7 @@ class ItemGenerator extends PureComponent<ItemProps> {
     render() {
         const { props } = this;
         const { options, form } = props;
-        const { config = [], status = 1, logic = {} } = options;
+        const { config = [], status = 1 } = options;
 
         // 异常配置兜底
         if (!Array.isArray(config)) {
@@ -36,7 +36,7 @@ class ItemGenerator extends PureComponent<ItemProps> {
 
         // 编辑态： 处理级联逻辑
         if (!viewStatus) {
-            middleConfig = transformConfig(form, middleConfig, logic);
+            middleConfig = transformConfig(form, middleConfig, options);
         }
 
         const showItems = middleConfig.filter((data) => data.show !== false);

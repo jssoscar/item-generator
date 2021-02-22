@@ -8,7 +8,7 @@
 import React, { PureComponent } from 'react';
 import ItemProps from './components/ItemProps';
 
-class ItemGenerator extends React.PureComponent<ItemProps> {
+class ItemGenerator extends PureComponent<ItemProps> {
     render(): React.ReactNode;
 }
 

@@ -5,15 +5,22 @@
  * @Description	
  */
 
-import { LogicMap } from '../components/ItemProps';
-import { extend } from './logic';
+import { Config as ItemConfig } from '../components/ItemProps';
+import { extend } from '../utils/logic';
 
 export interface Config {
+    /** Select|TreeSelect|Suggest|Checkbox|Radio|Cascader参数配置 */
     params?: Object;
+    /** 全局Col属性配置 */
     colProps?: Object;
+    /** 查看态元素基础配置 */
     descriptionsProps?: Object;
+    /** 查看状态下空值(undefined/null/'')的处理 */
     emptyText?: string;
-    logic?: LogicMap;
+    /** 元素继承基础配置 */
+    extends?: {
+        [key: string]: Omit<ItemConfig, 'logic' | 'extend'>;
+    };
     [name: string]: any;
 }
 
@@ -29,11 +36,15 @@ let GLOBAL_CONFIG = {
     colProps: {},
     descriptionsProps: {},
     emptyText: '无',
-    logic: {}
+    baseItemConfig: {}
 };
 
 let GLOBAL_COUNT = 1;
 
+/**
+ * 
+ * @param config ： 设置全局配置
+ */
 export const setGlobalConfig = (config: Config = {}) => {
     if (GLOBAL_COUNT > 1) {
         console.warn('全局配置建议只配置一次！');
