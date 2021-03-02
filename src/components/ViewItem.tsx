@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { Options } from './ItemProps';
 import { Descriptions } from 'antd';
 import { ITEMTYPES } from './const';
-import DangerHtml from './DangerHtml';
+import DangerHtml from '../custom/DangerHtml';
 import { getMiddleId } from './utils';
 import { getGlobalConfig } from '../utils/globalConfig';
 import filterValue from '../utils/filterValue';

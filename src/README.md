@@ -3,6 +3,18 @@
 
 ## Changelog
 
+### 0.6.8
+
+-   register组件：修复ts下报错的bug
+
+-   组件Factory：修复用户自定义组件type转换小写导致组件失效的bug
+
+### 0.6.7
+
+-   元素extends： 修复全局覆盖元素配置的bug
+
+-   级联： 优化类型合并处理
+
 ### 0.6.6
 
 -   级联：优化string/object/(string|object)[]类型配置处理

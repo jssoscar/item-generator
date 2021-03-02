@@ -21,8 +21,8 @@ import {
 import { ITEMTYPES } from './const';
 import buildSelect from '../utils/buildSelect';
 import translateOption from '../utils/translateOption';
-import WithTrim from './WithTrim';
-import DangerHtml from './DangerHtml';
+import WithTrim from '../custom/WithTrim';
+import DangerHtml from '../custom/DangerHtml';
 import { getGlobalConfig } from '../utils/globalConfig';
 import { getRegisteredComponent } from '../utils/registerComponent';
 import { getInitialValue, getMiddleId } from './utils';
@@ -158,8 +158,8 @@ export default ({ data, options, form }) => {
 
     // 用户：注册组件
     const registeredComponents = getRegisteredComponent();
-    if (registeredComponents[realType]) {
-        const Comp = registeredComponents[realType];
+    if (registeredComponents[type]) {
+        const Comp = registeredComponents[type];
         const template = <Comp form={form} status={1} {...props} />;
         return formable ? renderField(template) : template;
     }

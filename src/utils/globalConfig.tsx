@@ -42,8 +42,9 @@ let GLOBAL_CONFIG = {
 let GLOBAL_COUNT = 1;
 
 /**
+ * 设置全局配置
  * 
- * @param config ： 设置全局配置
+ * @param config ： 全局配置
  */
 export const setGlobalConfig = (config: Config = {}) => {
     if (GLOBAL_COUNT > 1) {

@@ -191,29 +191,28 @@ const transformReg = (data: Config) => {
  */
 export const transformConfig = (form: any, config: Config[], options: Options) => {
     const globalConfig = getGlobalConfig();
+    const { baseItemConfig = {} } = globalConfig;
 
-    return config.map((data) => {
-        let extendedData = extend(true, {}, data);
+    return config.map((val) => {
+        let data = extend(true, {}, val);
 
         // 元素继承基础配置
-        if (extendedData.extends) {
-            const middleExetends = Array.isArray(extendedData.extends)
-                ? extendedData.extends
-                : [extendedData.extends];
-
+        if (data.extends) {
+            const middleExetends = Array.isArray(data.extends) ? data.extends : [data.extends];
             middleExetends.forEach((cur) => {
-                const config = {
-                    ...(globalConfig.baseItemConfig || {})[cur],
-                    ...(options.extends || {})[cur]
-                };
-
-                extendedData = extend(true, extendedData, config);
+                const config = extend(
+                    true,
+                    {},
+                    (baseItemConfig || {})[cur],
+                    (options.extends || {})[cur]
+                );
+                data = extend(true, {}, config, data);
             });
         }
 
         // 无级联逻辑，则返回原始数据
         const realLogic = (() => {
-            const { logic } = extendedData;
+            const { logic } = data;
             // 未配置级联规则
             if (logic == undefined) {
                 return;
@@ -221,24 +220,21 @@ export const transformConfig = (form: any, config: Config[], options: Options) =
 
             let realLogic: any = logic;
             // string | object类型抹平为数组类型
-            if (typeof logic === 'string') {
-                realLogic = [logic];
-            } else if (!Array.isArray(logic)) {
+            if (typeof logic === 'string' || !Array.isArray(logic)) {
                 realLogic = [logic];
             }
 
             let result: any = [];
             // 遍历所有级联配置，转化成统一数组对象
             realLogic.forEach((val) => {
-                if (typeof val === 'string') {
-                    const config = (options.logic || {})[val];
-                    // 未配置规则
-                    if (config == undefined) {
-                        return;
-                    }
-                    Array.isArray(config) ? (result = [...result, ...config]) : result.push(config);
-                } else {
+                if (typeof val !== 'string') {
                     result.push(val);
+                    return;
+                }
+                const config = (options.logic || {})[val];
+                // 已配置规则
+                if (config != undefined) {
+                    Array.isArray(config) ? (result = [...result, ...config]) : result.push(config);
                 }
             });
 
@@ -246,7 +242,7 @@ export const transformConfig = (form: any, config: Config[], options: Options) =
         })();
 
         if (!Array.isArray(realLogic) || realLogic.length === 0) {
-            return transformReg(extendedData);
+            return transformReg(data);
         }
 
         // 获取匹配级联规则
@@ -277,7 +273,7 @@ export const transformConfig = (form: any, config: Config[], options: Options) =
 
         // 未匹配到级联规则
         if (!fitRules.length) {
-            return transformReg(extendedData);
+            return transformReg(data);
         }
 
         // 从后往前合并 ： 前置规则优先级更高
@@ -287,6 +283,6 @@ export const transformConfig = (form: any, config: Config[], options: Options) =
         }, {} as Config);
 
         // 合并原始配置与更新后配置
-        return transformReg(extend(true, {}, extendedData, mergedConfig));
+        return transformReg(extend(true, {}, data, mergedConfig));
     });
 };
