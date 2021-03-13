@@ -58,8 +58,8 @@ import { Form, Button, Row } from 'antd';
 import City from './City';
 import Hooks from './Hooks';
 
-import ItemGenerator, { setGlobalConfig, register } from '../src';
-import '../src/style';
+import ItemGenerator, { setGlobalConfig, register } from 'item-generator';
+import 'item-generator/style';
 
 setGlobalConfig({
     params: {
@@ -72,7 +72,7 @@ setGlobalConfig({
         bordered: true
     },
     emptyText: '--',
-    baseItemConfig: {
+    extends: {
         inputRequired: {
             item: {
                 options: {

@@ -1,8 +1,8 @@
 {
     "name": "item-generator",
-    "version": "0.7.0",
+    "version": "0.7.1-1",
     "description": "基于antd 3的react表单配置方案",
-    "main": "src/index.js",
+    "main": "index.js",
     "title": "item-generator",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
