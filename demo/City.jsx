@@ -5,68 +5,63 @@
  * @Description
  */
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Row } from 'antd';
 import ItemGenerator from '../src';
 
-class City extends PureComponent {
-    render() {
-        const { form, province, city, status } = this.props;
-        const config = [
-            {
-                id: 1,
-                value: '北京',
-                children: [
-                    {
-                        id: 11,
-                        value: '市内'
-                    }
-                ]
-            },
-            {
-                id: 2,
-                value: '陕西',
-                children: [
-                    {
-                        id: 22,
-                        value: '西安'
-                    }
-                ]
-            }
-        ];
-        const options = {
-            colable: true,
-            colProps: {
-                span: 12
-            },
-            config: [
+export default ({ province, city, status }) => {
+    const config = [
+        {
+            id: 1,
+            value: '北京',
+            children: [
                 {
-                    item: {
-                        id: province,
-                        type: 'select',
-                        data: config
-                    }
-                },
-                {
-                    item: {
-                        id: city,
-                        type: 'select',
-                        data: config
-                    }
+                    id: 11,
+                    value: '市内'
                 }
             ]
-        };
-
-        if (!status) {
-            return <div>我是查看态啊</div>;
+        },
+        {
+            id: 2,
+            value: '陕西',
+            children: [
+                {
+                    id: 22,
+                    value: '西安'
+                }
+            ]
         }
+    ];
+    const options = {
+        colable: true,
+        colProps: {
+            span: 12
+        },
+        config: [
+            {
+                item: {
+                    id: province,
+                    type: 'select',
+                    data: config
+                }
+            },
+            {
+                item: {
+                    id: city,
+                    type: 'select',
+                    data: config
+                }
+            }
+        ]
+    };
 
-        return (
-            <Row gutter={4}>
-                <ItemGenerator form={form} options={options} />
-            </Row>
-        );
+    if (!status) {
+        return <div>我是查看态啊</div>;
     }
-}
 
-export default City;
+    return (
+        <Row gutter={4}>
+            <ItemGenerator options={options} />
+        </Row>
+    );
+};

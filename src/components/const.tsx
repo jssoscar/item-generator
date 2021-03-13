@@ -1,12 +1,13 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:52:44 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:52:44
+ * @Version			1.0
+ * @Description
  */
 
 export const ITEMTYPES = {
     TEXT: 'text',
+
     SELECT: 'select',
     SUGGEST: 'suggest',
     TREESELECT: 'treeselect',
@@ -17,6 +18,7 @@ export const ITEMTYPES = {
     TEXTAREA: 'textarea',
     TEXTAREA_TRIM: 'textarea.trim',
     HIDDEN: 'hidden',
+    PASSWORD: 'password',
 
     SWITCH: 'switch',
     SLIDER: 'slider',
@@ -39,6 +41,7 @@ export const ITEMTYPES = {
     WEEKPICKER: 'weekpicker',
     MONTHPICKER: 'monthpicker',
     TIMEPICKER: 'timepicker',
+    YEARPICKER: 'yearpicker',
 
     CASCADER: 'cascader',
     HTML: 'html'

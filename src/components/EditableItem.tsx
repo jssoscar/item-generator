@@ -1,73 +1,97 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:52:50 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:52:50
+ * @Version			1.0
+ * @Description
  */
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { ItemProps, Config } from './ItemProps';
 import { Col, Form } from 'antd';
-import TemplateFactory from './TemplateFactory';
+import { FormInstance } from 'antd/lib/form';
 import { ITEMTYPES } from './const';
-import { getInitialValue, getMiddleId } from './utils';
+import TemplateFactory from './TemplateFactory';
 import { getGlobalConfig } from '../utils/globalConfig';
+import { transformConfig, extend } from '../utils/logic';
 
-const { Item: FromItem } = Form;
-const { HIDDEN } = ITEMTYPES;
+const { Item: FormItem } = Form;
 
 interface IProps extends ItemProps {
     data: Config;
-    form: any;
 }
 
-class Item extends PureComponent<IProps> {
-    getTemplate = () => {
-        const { props } = this;
-        const { data, options } = props;
-        const { item, formItemProps } = data;
-        const { label } = item;
+const { HIDDEN } = ITEMTYPES;
 
-        // 新增 && 编辑
-        return (
-            <FromItem label={label} {...options.formItemProps} {...formItemProps}>
-                {TemplateFactory(props)}
-            </FromItem>
-        );
-    };
+export default (props: IProps) => {
+    const { data, options } = props;
+    const { formItemProps = {} } = data;
 
-    render() {
-        const { data, options, form } = this.props;
+    const hasDep =
+        Array.isArray(formItemProps.dependencies) && formItemProps.dependencies.length > 0;
+
+    const renderTemplate = (config) => {
+        const {
+            show = true,
+            colProps,
+            item: { type }
+        } = config;
         const { colable } = options;
-        const { item = {}, colProps } = data;
-        const { getFieldDecorator } = form;
-        const realType = `${item.type}`.toLowerCase();
-
-        // hidden类型
-        if (realType === HIDDEN) {
-            const middleId = getMiddleId(item.id);
-            const { initialValue } = getInitialValue(HIDDEN, (options.data || {})[middleId]);
-            getFieldDecorator(item.id, {
-                initialValue,
-                ...item.options
-            });
-            return null;
-        }
-
-        const template = this.getTemplate();
-
-        // 编辑状态
-        if (colable) {
-            const middleColProps = {
-                ...getGlobalConfig().colProps,
+        const realType = `${type}`.toLowerCase();
+        let template4Render = TemplateFactory({
+            ...props,
+            data: config
+        });
+        const globalConfig = getGlobalConfig();
+        const getColTemplate = () => {
+            let middleColProps = {
+                ...globalConfig.colProps,
                 ...options.colProps,
                 ...colProps
             };
-            return <Col {...middleColProps}>{template}</Col>;
+
+            if (realType === HIDDEN) {
+                middleColProps = {
+                    ...middleColProps,
+                    style: {
+                        ...middleColProps.style,
+                        display: 'none'
+                    }
+                };
+            }
+
+            return <Col {...middleColProps}>{template4Render}</Col>;
+        };
+
+        // 需要colable包装
+        if (colable) {
+            template4Render = getColTemplate();
         }
 
-        return template;
-    }
-}
+        // 是否展示
+        return show ? template4Render : null;
+    };
 
-export default Item;
+    /**
+     * 有依赖 => render props
+     */
+    if (hasDep) {
+        return (
+            <FormItem dependencies={formItemProps.dependencies} noStyle>
+                {(form: FormInstance) => {
+                    const config = transformConfig(data, options, form);
+                    const newConfig = extend(true, {}, config, {
+                        formItemProps: {
+                            dependencies: []
+                        }
+                    });
+                    return renderTemplate(newConfig);
+                }}
+            </FormItem>
+        );
+    }
+
+    /**
+     * 不存在依赖 => 正常渲染组件
+     */
+    return renderTemplate(transformConfig(data, options));
+};

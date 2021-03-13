@@ -21,7 +21,6 @@ const { Item: DescItem } = Descriptions;
 
 interface IProps {
     options: Options;
-    form: any;
 }
 
 class ViewItem extends Component<IProps> {
@@ -35,16 +34,17 @@ class ViewItem extends Component<IProps> {
     }
 
     render() {
-        const { options, form } = this.props;
+        const { options } = this.props;
         const { config, descriptionsProps, data: initData = {} } = options;
-        const globalConfig = getGlobalConfig();
-        const middleDescriptionsProps = {
+        const globalConfig: any = getGlobalConfig();
+
+        const parsedDescriptionsProps = {
             ...globalConfig.descriptionsProps,
             ...descriptionsProps
         };
 
         return (
-            <Descriptions {...middleDescriptionsProps}>
+            <Descriptions {...parsedDescriptionsProps}>
                 {config.map(({ item = {} }, index) => {
                     const {
                         template,
@@ -58,17 +58,19 @@ class ViewItem extends Component<IProps> {
                         params,
                         data = []
                     } = item;
+
+                    const realType = `${type}`.toLowerCase();
                     const dataValue = initData[getMiddleId(name || id)];
-                    let dangerHtmlTemplate: any = null;
 
                     // 用户：注册组件
-                    const RegisteredComponent = getRegisteredComponent()[type];
+                    const RegisteredComponent = getRegisteredComponent()[realType];
                     let registeredComponentTemplate = RegisteredComponent ? (
-                        <RegisteredComponent form={form} status={0} {...props} />
+                        <RegisteredComponent status={0} {...props} />
                     ) : null;
 
+                    let dangerHtmlTemplate: any = null;
                     // html类型，只能支持到html结构的展示，通过DangerHtml包装
-                    if (type === HTML) {
+                    if (realType === HTML) {
                         const html = template || dataValue;
                         if (typeof html === 'string') {
                             dangerHtmlTemplate = <DangerHtml html={html} {...props} />;
@@ -78,7 +80,6 @@ class ViewItem extends Component<IProps> {
                             dangerHtmlTemplate = html;
                         }
                     }
-
                     // 最终展示的文案
                     let content =
                         registeredComponentTemplate ||
@@ -87,10 +88,9 @@ class ViewItem extends Component<IProps> {
                         filterValue({
                             data,
                             value: dataValue,
-                            type,
+                            type: realType,
                             params: { ...globalConfig.params, ...params }
                         });
-
                     // 空字符串处理
                     typeof content === 'string' && (content = content.trim());
 
@@ -101,6 +101,7 @@ class ViewItem extends Component<IProps> {
                     }
 
                     return (
+                        // @ts-ignore
                         <DescItem label={label} key={name || id || index} {...descriptionProps}>
                             {content}
                         </DescItem>

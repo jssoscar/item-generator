@@ -16,26 +16,29 @@ import {
     Radio,
     TimePicker,
     Cascader,
-    TreeSelect
+    TreeSelect,
+    Form
 } from 'antd';
 import { ITEMTYPES } from './const';
 import buildSelect from '../utils/buildSelect';
 import translateOption from '../utils/translateOption';
 import WithTrim from '../custom/WithTrim';
 import DangerHtml from '../custom/DangerHtml';
-import { getGlobalConfig } from '../utils/globalConfig';
-import { getRegisteredComponent } from '../utils/registerComponent';
 import { getInitialValue, getMiddleId } from './utils';
 import Suggest from '../custom/Suggest';
+import { getGlobalConfig } from '../utils/globalConfig';
+import { getRegisteredComponent } from '../utils/registerComponent';
 
+const { Item: FormItem } = Form;
 const { TextArea } = Input;
-const { RangePicker, WeekPicker, MonthPicker } = DatePicker;
+const { RangePicker, WeekPicker, MonthPicker, YearPicker } = DatePicker;
 const { Group: CheckboxGroup } = Checkbox;
 const { Group: RadioGroup, Button: RadioButton } = Radio;
 const TrimInput = WithTrim(Input);
 const TrimTextarea = WithTrim(TextArea);
 
 const {
+    HIDDEN,
     TEXT,
     NUMBER,
     INPUT_TRIM,
@@ -60,15 +63,15 @@ const {
     WEEKPICKER,
     MONTHPICKER,
     TIMEPICKER,
+    YEARPICKER,
 
     CASCADER,
     HTML
 } = ITEMTYPES;
 
-export default ({ data, options, form }) => {
-    const { item } = data;
+export default ({ data, options }) => {
+    const { item, formItemProps } = data;
     const { data: initData = {}, emptyText } = options;
-    const { getFieldDecorator } = form;
     const {
         id = '',
         type = INPUT_TRIM,
@@ -78,16 +81,38 @@ export default ({ data, options, form }) => {
         props,
         formable = true
     } = item;
+    let initialValue = getInitialValue(type, initData[getMiddleId(id)]);
     const realType = `${type}`.toLowerCase();
-    const initValue = initData[getMiddleId(id)];
-    let formOptions: { [name: string]: any } = getInitialValue(realType, initValue);
+    const globalConfig = getGlobalConfig();
+    const parsedParams = {
+        ...globalConfig.params,
+        ...params
+    };
+
+    let formItemParsedProps = {
+        label,
+        initialValue,
+        ...formItemProps
+    };
+
+    // 表单类型 & 存在id
+    if (formable && id) {
+        // 类型不可为text文本/html类型
+        if (![HTML, TEXT].includes(realType)) {
+            formItemParsedProps.name = id;
+        }
+    }
+
+    // hidden类型元素
+    if (realType === HIDDEN) {
+        formItemParsedProps.hidden = true;
+    }
 
     /**
      * checkbox/switch时，如果不设置valuePropName属性，再表单中无法重置数据
      */
-
-    if ([CHECKBOX, SWITCH].includes(realType)) {
-        formOptions.valuePropName = 'checked';
+    if ([CHECKBOX, SWITCH].includes(type)) {
+        formItemParsedProps.valuePropName = 'checked';
     }
 
     const defaultProps = {
@@ -101,14 +126,11 @@ export default ({ data, options, form }) => {
         }
     };
 
-    const globalConfig = getGlobalConfig();
-
-    const parsedParams = {
-        ...globalConfig.params,
-        ...params
-    };
-
     const itemOptions = translateOption(configData, parsedParams);
+
+    const renderFormItem = (template: React.ReactNode) => {
+        return <FormItem {...formItemParsedProps}>{template}</FormItem>;
+    };
 
     const TYPES = {
         [INPUT_TRIM]: <TrimInput {...defaultProps} />,
@@ -147,55 +169,49 @@ export default ({ data, options, form }) => {
         [WEEKPICKER]: <WeekPicker {...defaultStyle} {...defaultProps} />,
         [MONTHPICKER]: <MonthPicker {...defaultStyle} {...defaultProps} />,
         [TIMEPICKER]: <TimePicker {...defaultStyle} {...defaultProps} />,
+        [YEARPICKER]: <YearPicker {...defaultStyle} {...defaultProps} />,
 
         [CASCADER]: <Cascader {...defaultStyle} {...defaultProps} options={itemOptions} />
     };
-
-    const renderField = (template) =>
-        getFieldDecorator(id, {
-            ...formOptions,
-            ...item.options
-        })(template);
 
     // 用户：注册组件
     const registeredComponents = getRegisteredComponent();
     if (registeredComponents[realType]) {
         const Comp = registeredComponents[realType];
-        const template = <Comp form={form} status={1} {...props} />;
-        return formable ? renderField(template) : template;
+        return renderFormItem(<Comp status={1} {...props} />);
     }
 
     // HTML类型
     if (realType === HTML) {
-        const html = item.template || initValue;
+        const html = item.template || initialValue;
 
         // 配置了type: html  且  template为string类型
         if (typeof html === 'string') {
-            return <DangerHtml html={html} {...props} />;
+            return renderFormItem(<DangerHtml html={html} {...props} />);
         }
 
         // html类型非表单元素，则直接返回模板或者当前值
         console.warn('type为html类型时，建议template设置为string类型!');
-        return html;
+        return renderFormItem(html);
     }
 
     // 文字节点
     if (realType === TEXT) {
-        let content = initValue;
+        let content = initialValue;
         // 空字符串处理
         typeof content === 'string' && (content = content.trim());
 
         if ([undefined, ''].includes(content)) {
-            const defaultEmptyText = emptyText || item.emptyText || globalConfig.emptyText;
+            const defaultEmptyText = emptyText || item.emptyText || (globalConfig as any).emptyText;
             content = defaultEmptyText == undefined ? '无' : defaultEmptyText;
         }
 
-        return item.template || content;
+        return renderFormItem(item.template || content);
     }
 
     // 非表单元素
     if (!formable) {
-        return item.template;
+        return renderFormItem(item.template);
     }
 
     let template = TYPES[realType];
@@ -208,5 +224,5 @@ export default ({ data, options, form }) => {
     // 自定义模板优先级最高
     item.template && (template = item.template);
 
-    return renderField(template);
+    return renderFormItem(template);
 };

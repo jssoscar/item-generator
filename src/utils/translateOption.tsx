@@ -1,8 +1,8 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:52:32 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:52:32
+ * @Version			1.0
+ * @Description
  */
 
 const SIMPLETYPES = ['String', 'Number'];

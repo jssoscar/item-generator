@@ -5,62 +5,52 @@
  * @Description
  */
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import ItemProps from './components/ItemProps';
 import EditableItem from './components/EditableItem';
 import { isView } from './components/const';
 import ViewItem from './components/ViewItem';
-import { transformConfig, extend } from './utils/logic';
+import { extend } from './utils/logic';
 
-class ItemGenerator extends PureComponent<ItemProps> {
-    static defaultProps = {
-        options: {
+export default (props: ItemProps) => {
+    const {
+        options = {
             colable: false,
             status: 1,
             config: []
-        }
-    };
+        },
+        form
+    } = props;
+    const { config = [], status = 1 } = options;
 
-    render() {
-        const { props } = this;
-        const { options, form } = props;
-        const { config = [], status = 1 } = options;
-
-        // 异常配置兜底
-        if (!Array.isArray(config)) {
-            return null;
-        }
-
-        const viewStatus = isView(status);
-        let middleConfig = extend(true, [], config);
-
-        // 编辑态： 处理级联逻辑
-        if (!viewStatus) {
-            middleConfig = transformConfig(form, middleConfig, options);
-        }
-
-        const showItems = middleConfig.filter((data) => data.show !== false);
-
-        // 查看页面，使用查看组件
-        if (isView(status)) {
-            return (
-                <ViewItem
-                    options={{
-                        ...options,
-                        config: showItems
-                    }}
-                    form={form}
-                />
-            );
-        }
-
-        return showItems.map((data, index) => (
-            <EditableItem {...this.props} form={form} data={data} key={data.item.id || index} />
-        ));
+    // 异常配置兜底
+    if (!Array.isArray(config)) {
+        console.error('配置数据类型必须为数组类型！');
+        return null;
     }
-}
 
-export default ItemGenerator;
+    let middleConfig = extend(true, [], config);
+
+    // 查看页面，使用查看组件
+    if (isView(status)) {
+        return (
+            <ViewItem
+                options={{
+                    ...options,
+                    config: middleConfig.filter((data) => data.show !== false)
+                }}
+            />
+        );
+    }
+
+    return middleConfig.map((data, index) => (
+        <EditableItem
+            {...props}
+            data={data}
+            key={Array.isArray(data.item.id) ? index : data.item.id || index}
+        />
+    ));
+};
 
 /** 全局配置 */
 export { setGlobalConfig } from './utils/globalConfig';

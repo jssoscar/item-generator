@@ -28,7 +28,6 @@ let GLOBAL_CONFIG = {
     params: {
         showPleaseSel: true,
         initText: '请选择',
-        pleaseSelValue: '',
         label: 'value',
         value: 'id',
         children: 'children'
@@ -42,8 +41,9 @@ let GLOBAL_CONFIG = {
 let GLOBAL_COUNT = 1;
 
 /**
+ *
  * 设置全局配置
- * 
+ *
  * @param config ： 全局配置
  */
 export const setGlobalConfig = (config: Config = {}) => {

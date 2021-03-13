@@ -7,6 +7,7 @@
 
 import 'antd/lib/grid/style/index.css';
 import 'antd/lib/form/style/index.css';
+import 'antd/lib/spin/style/index.css';
 import 'antd/lib/input/style/index.css';
 import 'antd/lib/input-number/style/index.css';
 import 'antd/lib/tree-select/style/index.css';

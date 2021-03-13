@@ -1,8 +1,8 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:51:37 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:51:37
+ * @Version			1.0
+ * @Description
  */
 
 import React from 'react';
@@ -112,9 +112,9 @@ export const wrapBuildOptions = (data, props: IProps, options: IOptions) => {
             optionFilterProp: 'children',
             showSearch: true,
             filterOption: (input, option) => {
-                // 由于现在存在：select中带有tooltip，导致option.props.children可能是object形式
+                // 由于现在存在：select中带有tooltip，导致option.children可能是object形式
                 try {
-                    const { children } = option.props;
+                    const { children } = option;
                     const val = input.toLowerCase();
                     const filter = (data) => data.toLowerCase().indexOf(val) >= 0;
 

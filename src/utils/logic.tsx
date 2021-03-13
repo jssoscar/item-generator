@@ -7,7 +7,8 @@
  */
 
 import { Config, Options } from '../components/ItemProps';
-import { getGlobalConfig } from '../utils/globalConfig';
+import { FormInstance } from 'antd/lib/form';
+import { getGlobalConfig } from './globalConfig';
 
 const hasOwn = Object.prototype.hasOwnProperty;
 const toStr = Object.prototype.toString;
@@ -51,7 +52,7 @@ const isPlainObject = (obj) => {
  * @param args ： 所有参数
  */
 export const extend = (...args) => {
-    let options,
+    var options,
         name,
         src,
         copy,
@@ -131,16 +132,14 @@ export const extend = (...args) => {
 };
 
 const transformReg = (data: Config) => {
-    let {
-        item: { options = {} }
-    } = data;
+    let { formItemProps: { rules = [] } = {} } = data as any;
 
     /**
      * 对规则进行匹配
      *
      * 如果出现string类型的正则（一般是服务端下发的string类型），则转化为 RegExp类型
      */
-    if (options.rules) {
+    if (rules) {
         try {
             const str2RegExp = (string) => {
                 if (typeof string !== 'string') {
@@ -167,12 +166,11 @@ const transformReg = (data: Config) => {
                 return string;
             };
 
-            if (Array.isArray(options.rules)) {
-                options.rules.forEach((val: any) => {
+            if (Array.isArray(rules)) {
+                rules.forEach((val: any) => {
                     val.pattern && (val.pattern = str2RegExp(val.pattern));
                 });
             } else {
-                const { rules = {} }: any = options;
                 rules.pattern && (rules.pattern = str2RegExp(rules.pattern));
             }
         } catch (e) {}
@@ -185,106 +183,96 @@ const transformReg = (data: Config) => {
  *
  * 转换表单配置
  *
- * @param form ： 当前表单实例对象
  * @param config ：表单配置
- * @param logicMap: 顶层配置级联规则
+ * @param form ： 当前表单实例对象
  */
-export const transformConfig = (form: any, config: Config[], options: Options) => {
+export const transformConfig = (config: Config, options: Options, form?: FormInstance | any) => {
     const globalConfig = getGlobalConfig();
     const { extends: baseExtends = {} } = globalConfig;
+    let data = extend(true, {}, config);
+    // 元素继承基础配置
+    if (data.extends) {
+        const middleExetends = Array.isArray(data.extends) ? data.extends : [data.extends];
+        middleExetends.forEach((cur) => {
+            const config = extend(true, {}, (baseExtends || {})[cur], (options.extends || {})[cur]);
+            data = extend(true, {}, config, data);
+        });
+    }
 
-    return config.map((val) => {
-        let data = extend(true, {}, val);
-
-        // 元素继承基础配置
-        if (data.extends) {
-            const middleExetends = Array.isArray(data.extends) ? data.extends : [data.extends];
-            middleExetends.forEach((cur) => {
-                const config = extend(
-                    true,
-                    {},
-                    (baseExtends || {})[cur],
-                    (options.extends || {})[cur]
-                );
-                data = extend(true, {}, config, data);
-            });
+    // 无级联逻辑，则返回原始数据
+    const realLogic = (() => {
+        const { logic } = data;
+        // 未配置级联规则
+        if (logic == undefined) {
+            return;
         }
 
-        // 无级联逻辑，则返回原始数据
-        const realLogic = (() => {
-            const { logic } = data;
-            // 未配置级联规则
-            if (logic == undefined) {
+        let realLogic: any = logic;
+        // string | object类型抹平为数组类型
+        if (typeof logic === 'string' || !Array.isArray(logic)) {
+            realLogic = [logic];
+        }
+
+        let result: any = [];
+        // 遍历所有级联配置，转化成统一数组对象
+        realLogic.forEach((val) => {
+            if (typeof val !== 'string') {
+                result.push(val);
                 return;
             }
-
-            let realLogic: any = logic;
-            // string | object类型抹平为数组类型
-            if (typeof logic === 'string' || !Array.isArray(logic)) {
-                realLogic = [logic];
-            }
-
-            let result: any = [];
-            // 遍历所有级联配置，转化成统一数组对象
-            realLogic.forEach((val) => {
-                if (typeof val !== 'string') {
-                    result.push(val);
-                    return;
-                }
-                const config = (options.logic || {})[val];
-                // 已配置规则
-                if (config != undefined) {
-                    Array.isArray(config) ? (result = [...result, ...config]) : result.push(config);
-                }
-            });
-
-            return result.filter((val) => val);
-        })();
-
-        if (!Array.isArray(realLogic) || realLogic.length === 0) {
-            return transformReg(data);
-        }
-
-        // 获取匹配级联规则
-        const fitRules = realLogic.filter((cur) => {
-            const { test } = cur;
-            try {
-                // 执行自定义规则
-                if (isFunction(test)) {
-                    return test(form) === true;
-                } else {
-                    let hasExpress = false;
-                    // 替换表达式
-                    // @ts-ignore
-                    const expression = `${test}`.replace(/(\{([^\}]+)})/g, ($1, $2, name) => {
-                        hasExpress = true;
-                        /**
-                         * 这里会出现，数组类型数据
-                         * 所以需要对数组进行string化，防止[1,2,3]此类数据变成 1,2,3字符串
-                         */
-                        return JSON.stringify(form.getFieldValue(name));
-                    });
-
-                    // 执行表达式
-                    return hasExpress ? eval(expression) === true : test === true;
-                }
-            } catch (e) {
-                return false;
+            const config = (options.logic || {})[val];
+            // 已配置规则
+            if (config != undefined) {
+                Array.isArray(config) ? (result = [...result, ...config]) : result.push(config);
             }
         });
 
-        // 未匹配到级联规则
-        if (!fitRules.length) {
-            return transformReg(data);
+        return result.filter((val) => val);
+    })();
+
+    if (!Array.isArray(realLogic) || realLogic.length === 0) {
+        return transformReg(data);
+    }
+
+    // 获取匹配级联规则
+    const fitRules = realLogic.filter((cur) => {
+        const { test } = cur;
+        try {
+            // 执行自定义规则
+            if (isFunction(test)) {
+                return test(form) === true;
+            } else {
+                let hasExpress = false;
+                // 替换表达式
+                // @ts-ignore
+                const expression = `${test}`.replace(/(\{([^\}]+)})/g, ($1, $2, name) => {
+                    hasExpress = true;
+                    /**
+                     * 这里会出现，数组类型数据
+                     * 所以需要对数组进行string化，防止[1,2,3]此类数据变成 1,2,3字符串
+                     */
+                    return JSON.stringify(form.getFieldValue(name));
+                });
+
+                // 执行表达式
+                return hasExpress ? eval(expression) === true : test === true;
+            }
+        } catch (e) {
+            return false;
         }
-
-        // 从后往前合并 ： 前置规则优先级更高
-        const { test, ...mergedConfig }: Config = [...fitRules].reverse().reduce((prev, next) => {
-            prev = extend(true, {}, prev, next);
-            return prev;
-        }, {} as Config);
-
-        // 合并原始配置与更新后配置
-        return transformReg(extend(true, {}, data, mergedConfig));
     });
+
+    // 未匹配到级联规则
+    if (!fitRules.length) {
+        return transformReg(data);
+    }
+
+    // 从后往前合并 ： 前置规则优先级更高
+    const { test, ...mergedConfig }: Config = [...fitRules].reverse().reduce((prev, next) => {
+        prev = extend(true, {}, prev, next);
+        return prev;
+    }, {} as Config);
+
+    // 合并原始配置与更新后配置
+    return transformReg(extend(true, {}, data, mergedConfig));
 };

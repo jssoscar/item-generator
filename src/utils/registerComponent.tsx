@@ -5,8 +5,6 @@
  * @Description
  */
 
-import { forwardRef } from 'react';
-
 let REGISTERTED_COMPONENT = {};
 
 /**
@@ -15,11 +13,10 @@ let REGISTERTED_COMPONENT = {};
  *
  * @param type ： 组件类型
  * @param Comp ： 自定义组件
- * @param isHookComponent : 是否为hooks类型component
  */
-export const register = (type: string, Comp, isHookComponent: boolean = false) => {
+export const register = (type, Comp) => {
     if (!type || !Comp) {
-        return;
+        return null;
     }
 
     const realType = `${type}`.toLowerCase();
@@ -29,7 +26,7 @@ export const register = (type: string, Comp, isHookComponent: boolean = false) =
         console.warn(`类型：{type} 已注册，将覆盖已有组件！`);
     }
 
-    REGISTERTED_COMPONENT[realType] = isHookComponent ? forwardRef(Comp) : Comp;
+    REGISTERTED_COMPONENT[realType] = Comp;
 };
 
 /**
