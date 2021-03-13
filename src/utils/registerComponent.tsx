@@ -1,8 +1,8 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:52:25 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:52:25
+ * @Version			1.0
+ * @Description
  */
 
 import { forwardRef } from 'react';
@@ -19,10 +19,17 @@ let REGISTERTED_COMPONENT = {};
  */
 export const register = (type: string, Comp, isHookComponent: boolean = false) => {
     if (!type || !Comp) {
-        return null;
+        return;
     }
 
-    REGISTERTED_COMPONENT[type] = isHookComponent ? forwardRef(Comp) : Comp;
+    const realType = `${type}`.toLowerCase();
+
+    // 组件已注册
+    if (REGISTERTED_COMPONENT[realType]) {
+        console.warn(`类型：{type} 已注册，将覆盖已有组件！`);
+    }
+
+    REGISTERTED_COMPONENT[realType] = isHookComponent ? forwardRef(Comp) : Comp;
 };
 
 /**
@@ -36,7 +43,9 @@ export const unregister = (type) => {
         return;
     }
 
-    delete REGISTERTED_COMPONENT[type];
+    const realType = `${type}`.toLowerCase();
+
+    delete REGISTERTED_COMPONENT[realType];
 };
 
 /**

@@ -1,5 +1,5 @@
 /*
- * @Author			jishengsheng
+ * @Author			jssoscar
  * @Date			2021-02-01 19:26:53
  * @Version			1.0
  * @Description
@@ -13,7 +13,6 @@ const resolvePath = (relativePath) => path.resolve(appDirectory, relativePath);
 
 gulp.task('copy', async () => {
     // 复制package.json / readme
-    console.log('teessafdsafdsfsaf');
     await gulp
         .src([resolvePath('./src/package.json'), resolvePath('./src/README.md')])
         .pipe(gulp.dest(resolvePath('./dist')));

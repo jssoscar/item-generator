@@ -6,7 +6,7 @@
  */
 
 import { Config as ItemConfig } from '../components/ItemProps';
-import { extend } from '../utils/logic';
+import { extend } from './logic';
 
 export interface Config {
     /** Select|TreeSelect|Suggest|Checkbox|Radio|Cascader参数配置 */
@@ -36,7 +36,7 @@ let GLOBAL_CONFIG = {
     colProps: {},
     descriptionsProps: {},
     emptyText: '无',
-    baseItemConfig: {}
+    extends: {}
 };
 
 let GLOBAL_COUNT = 1;

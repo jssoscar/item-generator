@@ -2,9 +2,9 @@
     "compilerOptions": {
         "strictNullChecks": true,
         "moduleResolution": "node",
-        "allowJs": true /** 允许编译javascript文件 */,
-        "skipLibCheck": true /** 忽略所有的声明文件（ *.d.ts）的类型检查 */,
-        "module": "esnext" /** 指定生成哪个模块系统代码 */,
+        "allowJs": true,
+        "skipLibCheck": true,
+        "module": "esnext",
         "experimentalDecorators": true,
         "strictFunctionTypes": false,
         "jsx": "react",
@@ -13,12 +13,13 @@
         "strict": false,
         "noUnusedLocals": false,
         "target": "es5",
-        "outDir": "./dist",
+        "outDir": "dist",
         "noImplicitAny": false,
         "types": [],
         "lib": ["dom", "es2015", "es2017", "es2017.object"],
-        "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
-        "emitDecoratorMetadata": true, /* Enables experimental support for emitting type metadata for decorators. */
+        "allowSyntheticDefaultImports": true,
+        "emitDecoratorMetadata": true
     },
-    "module": "ESNext"
+    "module": "ESNext",
+    "include": ["src"]
 }

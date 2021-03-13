@@ -24,7 +24,7 @@ setGlobalConfig({
         bordered: true
     },
     emptyText: '--',
-    baseItemConfig: {
+    extends: {
         inputRequired: {
             item: {
                 options: {

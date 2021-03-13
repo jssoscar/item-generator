@@ -41,9 +41,10 @@ class Item extends PureComponent<IProps> {
         const { colable } = options;
         const { item = {}, colProps } = data;
         const { getFieldDecorator } = form;
+        const realType = `${item.type}`.toLowerCase();
 
         // hidden类型
-        if (item.type === HIDDEN) {
+        if (realType === HIDDEN) {
             const middleId = getMiddleId(item.id);
             const { initialValue } = getInitialValue(HIDDEN, (options.data || {})[middleId]);
             getFieldDecorator(item.id, {

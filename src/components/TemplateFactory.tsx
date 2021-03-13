@@ -78,14 +78,15 @@ export default ({ data, options, form }) => {
         props,
         formable = true
     } = item;
+    const realType = `${type}`.toLowerCase();
     const initValue = initData[getMiddleId(id)];
-    let formOptions: { [name: string]: any } = getInitialValue(type, initValue);
+    let formOptions: { [name: string]: any } = getInitialValue(realType, initValue);
 
     /**
      * checkbox/switch时，如果不设置valuePropName属性，再表单中无法重置数据
      */
 
-    if ([CHECKBOX, SWITCH].includes(type)) {
+    if ([CHECKBOX, SWITCH].includes(realType)) {
         formOptions.valuePropName = 'checked';
     }
 
@@ -106,7 +107,7 @@ export default ({ data, options, form }) => {
         ...globalConfig.params,
         ...params
     };
-    const realType = `${type}`.toLowerCase();
+
     const itemOptions = translateOption(configData, parsedParams);
 
     const TYPES = {
@@ -158,8 +159,8 @@ export default ({ data, options, form }) => {
 
     // 用户：注册组件
     const registeredComponents = getRegisteredComponent();
-    if (registeredComponents[type]) {
-        const Comp = registeredComponents[type];
+    if (registeredComponents[realType]) {
+        const Comp = registeredComponents[realType];
         const template = <Comp form={form} status={1} {...props} />;
         return formable ? renderField(template) : template;
     }

@@ -191,7 +191,7 @@ const transformReg = (data: Config) => {
  */
 export const transformConfig = (form: any, config: Config[], options: Options) => {
     const globalConfig = getGlobalConfig();
-    const { baseItemConfig = {} } = globalConfig;
+    const { extends: baseExtends = {} } = globalConfig;
 
     return config.map((val) => {
         let data = extend(true, {}, val);
@@ -203,7 +203,7 @@ export const transformConfig = (form: any, config: Config[], options: Options) =
                 const config = extend(
                     true,
                     {},
-                    (baseItemConfig || {})[cur],
+                    (baseExtends || {})[cur],
                     (options.extends || {})[cur]
                 );
                 data = extend(true, {}, config, data);
@@ -253,9 +253,11 @@ export const transformConfig = (form: any, config: Config[], options: Options) =
                 if (isFunction(test)) {
                     return test(form) === true;
                 } else {
+                    let hasExpress = false;
                     // 替换表达式
                     // @ts-ignore
                     const expression = `${test}`.replace(/(\{([^\}]+)})/g, ($1, $2, name) => {
+                        hasExpress = true;
                         /**
                          * 这里会出现，数组类型数据
                          * 所以需要对数组进行string化，防止[1,2,3]此类数据变成 1,2,3字符串
@@ -264,7 +266,7 @@ export const transformConfig = (form: any, config: Config[], options: Options) =
                     });
 
                     // 执行表达式
-                    return eval(expression) === true;
+                    return hasExpress ? eval(expression) === true : test === true;
                 }
             } catch (e) {
                 return false;
