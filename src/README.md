@@ -4,10 +4,13 @@
 
 ## Changelog
 
+### 0.5.1
+
+-   修复ts编译报错的bug
+
 ### 0.5.0
 
 -   全局配置：baseItemConfig修改为extends关键字
-
 
 ### 0.4.9
 
