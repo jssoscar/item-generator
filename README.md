@@ -689,7 +689,7 @@ setGlobalConfig({
 | type | 组件名称 | String | '' | 是 |
 
 ```jsx
-import { register, unregister } from '@esp/sfe-item-generator';
+import { register, unregister } from 'item-generator4';
 
 // 注册组件
 register('city', City);
@@ -703,7 +703,7 @@ unregister('city');
 * <strong>自定义组件会自动注入当前表单状态status 以及 当前item配置的props对象</strong>
 
 ```jsx
-import { register, unregister } from '@esp/sfe-item-generator4';
+import { register, unregister } from 'item-generator4';
 
 // 注册组件
 register('city', City);
