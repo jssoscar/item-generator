@@ -96,6 +96,13 @@ setGlobalConfig({
                     ]
                 }
             }
+        },
+        notRequired: {
+            item: {
+                options: {
+                    rules: []
+                }
+            }
         }
     }
 });
@@ -191,29 +198,13 @@ class Test extends PureComponent {
                     item: {
                         id: 'nametrim',
                         label: 'input去空格',
-                        type: 'input.trim',
-                        options: {
-                            rules: [
-                                {
-                                    pattern: '/a\\w+/ig',
-                                    message: '请输入有效正则'
-                                }
-                            ]
-                        }
+                        type: 'input.trim'
                     },
                     logic: {
                         test: '{age} == 1',
-                        item: {
-                            options: {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入'
-                                    }
-                                ]
-                            }
-                        }
-                    }
+                        extends: 'notRequired'
+                    },
+                    extends: 'inputRequired'
                 },
                 {
                     item: {
@@ -232,16 +223,7 @@ class Test extends PureComponent {
                     logic: [
                         {
                             test: '{ageMulit}.includes(1)',
-                            item: {
-                                options: {
-                                    rules: [
-                                        {
-                                            required: false,
-                                            message: '请输入'
-                                        }
-                                    ]
-                                }
-                            }
+                            extends: 'notRequired'
                         },
                         {
                             test: `{age} == 1`,
@@ -249,7 +231,8 @@ class Test extends PureComponent {
                                 type: 'textarea'
                             }
                         }
-                    ]
+                    ],
+                    extends: 'inputRequired'
                 },
                 {
                     item: {

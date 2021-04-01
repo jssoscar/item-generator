@@ -3,6 +3,14 @@
 
 ## Changelog
 
+### 0.7.2
+
+-   extends：增加logic中配置extends的解析
+
+### 0.7.1
+
+-   register: 增加再次注册已注册组件的提示
+
 ### 0.7.0
 
 -   全局配置：baseItemConfig修改为extends关键字

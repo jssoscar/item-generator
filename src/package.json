@@ -1,6 +1,6 @@
 {
     "name": "item-generator",
-    "version": "0.7.1-1",
+    "version": "0.7.2",
     "description": "基于antd 3的react表单配置方案",
     "main": "index.js",
     "title": "item-generator",

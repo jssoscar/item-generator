@@ -48,6 +48,13 @@ setGlobalConfig({
                     ]
                 }
             }
+        },
+        notRequired: {
+            item: {
+                options: {
+                    rules: []
+                }
+            }
         }
     }
 });
@@ -142,30 +149,13 @@ class Test extends PureComponent {
                 {
                     item: {
                         id: 'nametrim',
-                        label: 'input去空格',
-                        type: 'input.trim',
-                        options: {
-                            rules: [
-                                {
-                                    pattern: '/a\\w+/ig',
-                                    message: '请输入有效正则'
-                                }
-                            ]
-                        }
+                        label: 'input去空格'
                     },
                     logic: {
                         test: '{age} == 1',
-                        item: {
-                            options: {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入'
-                                    }
-                                ]
-                            }
-                        }
-                    }
+                        extends: 'notRequired'
+                    },
+                    extends: 'inputRequired'
                 },
                 {
                     item: {
