@@ -74,27 +74,28 @@ setGlobalConfig({
     emptyText: '--',
     extends: {
         inputRequired: {
-            item: {
-                options: {
-                    rules: [
-                        {
-                            required: true,
-                            message: '请输入'
-                        }
-                    ]
-                }
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入'
+                    }
+                ]
             }
         },
         selectRequired: {
-            item: {
-                options: {
-                    rules: [
-                        {
-                            required: true,
-                            message: '请选择'
-                        }
-                    ]
-                }
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '请选择'
+                    }
+                ]
+            }
+        },
+        notRequired: {
+            formItemProps: {
+                rules: []
             }
         }
     }
@@ -173,17 +174,11 @@ class Test extends PureComponent {
                     }
                 },
                 {
+                    formItemProps: {},
+
                     item: {
                         id: 'name',
-                        label: 'input基础类型',
-                        options: {
-                            rules: [
-                                {
-                                    pattern: '/\\d+/',
-                                    message: '请输入有效手机号'
-                                }
-                            ]
-                        }
+                        label: 'input基础类型'
                     },
                     logic: 'nameRequired'
                 },
@@ -191,57 +186,23 @@ class Test extends PureComponent {
                     item: {
                         id: 'nametrim',
                         label: 'input去空格',
-                        type: 'input.trim',
-                        options: {
-                            rules: [
-                                {
-                                    pattern: '/a\\w+/ig',
-                                    message: '请输入有效正则'
-                                }
-                            ]
-                        }
+                        type: 'input.trim'
                     },
                     logic: {
                         test: '{age} == 1',
-                        item: {
-                            options: {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入'
-                                    }
-                                ]
-                            }
-                        }
+                        extends: 'inputRequired'
                     }
                 },
                 {
                     item: {
                         id: 'number',
                         label: '数字(级联)',
-                        type: 'number',
-                        options: {
-                            rules: [
-                                {
-                                    required: true,
-                                    message: '请输入'
-                                }
-                            ]
-                        }
+                        type: 'number'
                     },
                     logic: [
                         {
                             test: '{ageMulit}.includes(1)',
-                            item: {
-                                options: {
-                                    rules: [
-                                        {
-                                            required: false,
-                                            message: '请输入'
-                                        }
-                                    ]
-                                }
-                            }
+                            extends: 'notRequired'
                         },
                         {
                             test: `{age} == 1`,
@@ -249,7 +210,8 @@ class Test extends PureComponent {
                                 type: 'textarea'
                             }
                         }
-                    ]
+                    ],
+                    extends: 'inputRequired'
                 },
                 {
                     item: {
@@ -504,21 +466,10 @@ class Test extends PureComponent {
             },
             colable,
             logic: {
-                nameRequired: [
-                    {
-                        test: '{age} == 1',
-                        item: {
-                            options: {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入'
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                ]
+                nameRequired: {
+                    test: '{age} == 1',
+                    extend: 'inputRequired'
+                }
             }
         };
 

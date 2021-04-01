@@ -4,6 +4,12 @@
 
 ## Changelog
 
+### 0.5.2
+
+-   extends：增加logic中配置extends的解析
+
+-   register: 增加再次注册已注册组件的提示
+
 ### 0.5.1
 
 -   修复ts编译报错的bug

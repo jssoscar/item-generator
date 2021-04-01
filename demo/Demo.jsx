@@ -53,6 +53,11 @@ setGlobalConfig({
                     }
                 }
             }
+        },
+        notRequired: {
+            formItemProps: {
+                rules: []
+            }
         }
     }
 });
@@ -150,15 +155,9 @@ export default () => {
                 },
                 logic: {
                     test: '{age} == 1',
-                    formItemProps: {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入'
-                            }
-                        ]
-                    }
-                }
+                    extends: 'notRequired'
+                },
+                extends: 'inputRequired'
             },
             {
                 formItemProps: {

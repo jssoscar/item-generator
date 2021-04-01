@@ -23,7 +23,7 @@ export const register = (type, Comp) => {
 
     // 组件已注册
     if (REGISTERTED_COMPONENT[realType]) {
-        console.warn(`类型：{type} 已注册，将覆盖已有组件！`);
+        console.warn(`类型：${type} 已注册，将覆盖已有组件！`);
     }
 
     REGISTERTED_COMPONENT[realType] = Comp;

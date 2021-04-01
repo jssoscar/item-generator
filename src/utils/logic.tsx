@@ -181,15 +181,16 @@ const transformReg = (data: Config) => {
 
 /**
  *
- * 转换表单配置
+ * 解析extends继承
  *
- * @param config ：表单配置
- * @param form ： 当前表单实例对象
+ * @param data ： 当前表单元素配置
+ * @param options ： 表单配置
  */
-export const transformConfig = (config: Config, options: Options, form?: FormInstance | any) => {
+ const transformExtends = (val: Config, options: Options) => {
+    let data = extend(true, {}, val);
     const globalConfig = getGlobalConfig();
     const { extends: baseExtends = {} } = globalConfig;
-    let data = extend(true, {}, config);
+
     // 元素继承基础配置
     if (data.extends) {
         const middleExetends = Array.isArray(data.extends) ? data.extends : [data.extends];
@@ -198,6 +199,19 @@ export const transformConfig = (config: Config, options: Options, form?: FormIns
             data = extend(true, {}, config, data);
         });
     }
+    return data;
+};
+
+/**
+ *
+ * 转换表单配置
+ *
+ * @param config ：表单配置
+ * @param form ： 当前表单实例对象
+ */
+export const transformConfig = (config: Config, options: Options, form?: FormInstance | any) => {
+    // 元素继承基础配置
+    let data = transformExtends(config, options);
 
     // 无级联逻辑，则返回原始数据
     const realLogic = (() => {
@@ -268,11 +282,17 @@ export const transformConfig = (config: Config, options: Options, form?: FormIns
     }
 
     // 从后往前合并 ： 前置规则优先级更高
-    const { test, ...mergedConfig }: Config = [...fitRules].reverse().reduce((prev, next) => {
-        prev = extend(true, {}, prev, next);
-        return prev;
-    }, {} as Config);
+    const { test, logic, ...mergedConfig }: Config = [...fitRules]
+        .reverse()
+        .reduce((prev, next) => {
+            prev = extend(true, {}, prev, next);
+            return prev;
+        }, {} as Config);
+
+    // 解析合并后extends处理
+    const result = transformExtends(mergedConfig, options);
 
     // 合并原始配置与更新后配置
-    return transformReg(extend(true, {}, data, mergedConfig));
+    return transformReg(extend(true, {}, data, result));
 };
+
