@@ -604,7 +604,7 @@ export default Form.create()(Test);
 | emptyText | 查看状态下空值(undefined/null)的处理 | string | '无' | 否 |
 
 
-#### config.logic
+#### config.extends
 
 此场景下，建议配置一些常用布局、必填的常规配置，这样不需要每个元素进行配置规则
 
@@ -662,17 +662,16 @@ setGlobalConfig({
 
 ## 注册自定义类型组件
 
-### register(type, Component, isHookComponent)
+### register(type, Component)
 
 * 注册自定义类型组件
 
-* Antd 3表单使用Class component，如果开发hooks表单组件嵌入到Form中，需要forwardref，此场景配置第三个参数为true即可。
+* Antd 3表单使用Class component，如果开发hooks表单组件嵌入到Form中，需要forwardref。注册组件会自动判断当前类型进行forwardRef
 
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- |
 | type | 组件名称 | String | '' | 是 |
 | Component | 自定义注册组件 | React.ReactNode | null | 是 |
-| isHookComponent | 是否为hooks组件 | boolean | false | 否 |
 
 ### unregister(type)
 
@@ -720,10 +719,12 @@ register('city', City);
 | status | 表单状态（0：查看态，1：编辑态） | number | 1 | 否 |
 | data | 表单初始化数据 | object | {} | 否 |
 | colProps | colable为true，则应用此配置（属性参考<a href="https://3x.ant.design/components/grid-cn/#Col" target="_blank">Col</a>） | object | {} | 否 |
+| formItemProps | 局部表单Item属性（属性参考<a href="https://3x.ant.design/components/form-cn/#Form.Item" target="_blank">Form.Item</a>） | object | {} | 否 |
 | descriptionsProps | 查看状态下，描述列表配置（属性参考<a href="https://3x.ant.design/components/descriptions-cn/#Descriptions" target="_blank">Descriptions</a>） | object | {}| 否 |
 | colable | 是否以Col封装 | boolean | false | 否 |
 | config | 表单项配置，具体参考<a href="#Config">Config</a> | array | [] | 是 |
-| logic | 局部级联规则配置(如果表单元素配置string类型，则根据当前配置来匹配相应级联规则) | {key: Logic[]} | {} | 否 |
+| logic | 局部级联规则配置 | {key: Logic| Logic[]} | {} | 否 |
+| extends | 局部继承规则配置，具体参考<a href="#Config" | Object | {} | 否 |
 
 ### Config
 
@@ -733,7 +734,8 @@ register('city', City);
 | colProps | colable为true，则应用此配置（属性参考<a href="https://3x.ant.design/components/grid-cn/#Col" target="_blank">Col</a>） | object | {} | 否 |
 | formItemProps | 表单Item属性（属性参考<a href="https://3x.ant.design/components/form-cn/#Form.Item" target="_blank">Form.Item</a>） | object | {} | 否 |
 | item | 表单元素配置，具体参考<a href="#Item">Item</a> | object | - | 是 |
-| logic | 表单级联配置方案，具体参考<a href="#Logic">Logic</a> | string/Logic/Logic[] | '' | 否 |
+| logic | 表单级联配置方案，具体参考<a href="#Logic">Logic</a> | string/Logic/(string/Logic)[] | '' | 否 |
+| extends | 表单继承属性配置，具体参考<a href="#Config" | string/string[] | '' | 否 |
 
 #### Item
 

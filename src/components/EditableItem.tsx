@@ -1,8 +1,8 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:52:50 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:52:50
+ * @Version			1.0
+ * @Description
  */
 
 import React, { PureComponent } from 'react';
@@ -11,6 +11,7 @@ import { Col, Form } from 'antd';
 import TemplateFactory from './TemplateFactory';
 import { ITEMTYPES } from './const';
 import { getInitialValue, getMiddleId } from './utils';
+import { extend } from '../utils/logic';
 import { getGlobalConfig } from '../utils/globalConfig';
 
 const { Item: FromItem } = Form;
@@ -27,10 +28,11 @@ class Item extends PureComponent<IProps> {
         const { data, options } = props;
         const { item, formItemProps } = data;
         const { label } = item;
+        const realFormItemProps = extend(true, {}, options.formItemProps, formItemProps);
 
         // 新增 && 编辑
         return (
-            <FromItem label={label} {...options.formItemProps} {...formItemProps}>
+            <FromItem label={label} {...realFormItemProps}>
                 {TemplateFactory(props)}
             </FromItem>
         );

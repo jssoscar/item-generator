@@ -3,6 +3,22 @@
 
 ## Changelog
 
+### 0.7.5
+
+-   修改index.d.ts默认导出
+
+-   注册邮件：优化formwardRef组件处理
+
+### 0.7.4
+
+-   查看态： 增加rangepicker展示逻辑处理
+
+### 0.7.3
+
+-   register注册自定义组件：去除isHooks组件，自动判断注册组件类型
+
+-   options配置：增加局部FormItemProps属性以及配置合并处理
+
 ### 0.7.2
 
 -   extends：增加logic中配置extends的解析

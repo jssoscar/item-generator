@@ -58,17 +58,18 @@ class ViewItem extends Component<IProps> {
                         params,
                         data = []
                     } = item;
+                    const realType = `${type}`.toLowerCase();
                     const dataValue = initData[getMiddleId(name || id)];
                     let dangerHtmlTemplate: any = null;
 
                     // 用户：注册组件
-                    const RegisteredComponent = getRegisteredComponent()[type];
+                    const RegisteredComponent = getRegisteredComponent()[realType];
                     let registeredComponentTemplate = RegisteredComponent ? (
                         <RegisteredComponent form={form} status={0} {...props} />
                     ) : null;
 
                     // html类型，只能支持到html结构的展示，通过DangerHtml包装
-                    if (type === HTML) {
+                    if (realType === HTML) {
                         const html = template || dataValue;
                         if (typeof html === 'string') {
                             dangerHtmlTemplate = <DangerHtml html={html} {...props} />;
@@ -87,7 +88,7 @@ class ViewItem extends Component<IProps> {
                         filterValue({
                             data,
                             value: dataValue,
-                            type,
+                            type: realType,
                             params: { ...globalConfig.params, ...params }
                         });
 
