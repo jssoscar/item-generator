@@ -86,6 +86,8 @@ export interface LogicMap {
 export interface Options extends Empty {
     /** Col样式，如果colable设置为true，则会应用此配置 */
     colProps?: ColProps;
+    /** FormItem的局部props配置 */
+    formItemProps?: FormItemProps;
     /** 查看状态下详情容器样式 */
     descriptionsProps?: DescriptionsProps;
     /** 查看状态下，null/undefined字段的兜底展示 */
@@ -101,12 +103,16 @@ export interface Options extends Empty {
     /** 级联map规则 */
     logic?: LogicMap;
     /** 元素继承配置 */
-    extends?: {
-        [key: string]: Config;
-    };
+    extends?:
+        | {
+              [key: string]: Config;
+          }
+        | any;
 }
 
 export interface ItemProps extends Empty {
+    /** antd表单对象，查看态非必需 */
+    form?: FormInstance;
     /** 表单配置 */
     options: Options;
 }

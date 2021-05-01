@@ -16,7 +16,8 @@ const {
     RADIO,
     RADIOGROUP,
     RADIOGROUPBUTTON,
-    CASCADER
+    CASCADER,
+    RANGEPICKER
 } = ITEMTYPES;
 
 const TYPES = [
@@ -27,19 +28,16 @@ const TYPES = [
     RADIO,
     RADIOGROUP,
     RADIOGROUPBUTTON,
-    CASCADER
+    CASCADER,
+    RANGEPICKER
 ];
 
 export default (config: any = {}) => {
     const { data = [], value = '', type = '', params = {} } = config;
     const realType = `${type}`.toLowerCase();
 
-    // 非数组 || 数组长度为0 || 不包含类型，不处理数据，则直接返回原始数据
-    if (
-        !Array.isArray(data) ||
-        !TYPES.includes(realType) ||
-        (Array.isArray(data) && data.length === 0)
-    ) {
+    // 不包含类型，不处理数据，则直接返回原始数据 || 非数组
+    if (!TYPES.includes(realType) || !Array.isArray(data)) {
         return value;
     }
 
@@ -71,7 +69,12 @@ export default (config: any = {}) => {
             return result === undefined ? value[index] : result;
         });
 
-        return result.join(realType === CASCADER ? ' / ' : ', ');
+        const SEPARATOR = {
+            [CASCADER]: '/',
+            [RANGEPICKER]: ' - '
+        };
+
+        return result.join(SEPARATOR[realType] || ', ');
     } else {
         let result = filter(options, value);
         return result === undefined ? value : result;

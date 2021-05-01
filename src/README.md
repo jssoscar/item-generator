@@ -4,6 +4,31 @@
 
 ## Changelog
 
+### 0.5.5
+
+-   修改index.d.ts默认导出
+
+### 0.5.4
+
+-   查看态： 增加rangepicker展示逻辑处理
+
+### 0.5.3
+
+-   ItemGenerator4：属性增加form参数实例配置
+
+
+### 0.5.2-3
+
+-   rebuildForm方法：getFieldValue不做a.b.c此类id转换
+
+### 0.5.2-2
+
+-   增加rebuildForm方法：处理antd 3中存在a.b.c此类id的表单字段
+
+### 0.5.2-1
+
+-   options配置：增加局部FormItemProps属性以及配置合并处理
+
 ### 0.5.2
 
 -   extends：增加logic中配置extends的解析

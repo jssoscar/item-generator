@@ -186,7 +186,7 @@ const transformReg = (data: Config) => {
  * @param data ： 当前表单元素配置
  * @param options ： 表单配置
  */
- const transformExtends = (val: Config, options: Options) => {
+const transformExtends = (val: Config, options: Options) => {
     let data = extend(true, {}, val);
     const globalConfig = getGlobalConfig();
     const { extends: baseExtends = {} } = globalConfig;
@@ -295,4 +295,3 @@ export const transformConfig = (config: Config, options: Options, form?: FormIns
     // 合并原始配置与更新后配置
     return transformReg(extend(true, {}, data, result));
 };
-

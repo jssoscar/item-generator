@@ -8,6 +8,7 @@
 import React, { Component } from 'react';
 import { Options } from './ItemProps';
 import { Descriptions } from 'antd';
+import { FormInstance } from 'antd/es/form/Form';
 import { ITEMTYPES } from './const';
 import DangerHtml from '../custom/DangerHtml';
 import { getMiddleId } from './utils';
@@ -21,6 +22,7 @@ const { Item: DescItem } = Descriptions;
 
 interface IProps {
     options: Options;
+    form?: FormInstance;
 }
 
 class ViewItem extends Component<IProps> {
@@ -34,7 +36,7 @@ class ViewItem extends Component<IProps> {
     }
 
     render() {
-        const { options } = this.props;
+        const { options, form } = this.props;
         const { config, descriptionsProps, data: initData = {} } = options;
         const globalConfig: any = getGlobalConfig();
 
@@ -65,7 +67,7 @@ class ViewItem extends Component<IProps> {
                     // 用户：注册组件
                     const RegisteredComponent = getRegisteredComponent()[realType];
                     let registeredComponentTemplate = RegisteredComponent ? (
-                        <RegisteredComponent status={0} {...props} />
+                        <RegisteredComponent form={form} status={0} {...props} />
                     ) : null;
 
                     let dangerHtmlTemplate: any = null;

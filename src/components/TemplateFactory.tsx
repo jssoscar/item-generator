@@ -28,6 +28,7 @@ import { getInitialValue, getMiddleId } from './utils';
 import Suggest from '../custom/Suggest';
 import { getGlobalConfig } from '../utils/globalConfig';
 import { getRegisteredComponent } from '../utils/registerComponent';
+import { extend } from '../utils/logic';
 
 const { Item: FormItem } = Form;
 const { TextArea } = Input;
@@ -69,7 +70,7 @@ const {
     HTML
 } = ITEMTYPES;
 
-export default ({ data, options }) => {
+export default ({ data, options, form }) => {
     const { item, formItemProps } = data;
     const { data: initData = {}, emptyText } = options;
     const {
@@ -89,10 +90,12 @@ export default ({ data, options }) => {
         ...params
     };
 
+    const realFormItemProps = extend(true, {}, options.formItemProps, formItemProps);
+
     let formItemParsedProps = {
         label,
         initialValue,
-        ...formItemProps
+        ...realFormItemProps
     };
 
     // 表单类型 & 存在id
@@ -178,7 +181,7 @@ export default ({ data, options }) => {
     const registeredComponents = getRegisteredComponent();
     if (registeredComponents[realType]) {
         const Comp = registeredComponents[realType];
-        return renderFormItem(<Comp status={1} {...props} />);
+        return renderFormItem(<Comp form={form} status={1} {...props} />);
     }
 
     // HTML类型

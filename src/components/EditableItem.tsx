@@ -6,9 +6,9 @@
  */
 
 import React from 'react';
-import { ItemProps, Config } from './ItemProps';
 import { Col, Form } from 'antd';
-import { FormInstance } from 'antd/lib/form';
+import { FormInstance } from 'antd/es/form/Form';
+import { ItemProps, Config } from './ItemProps';
 import { ITEMTYPES } from './const';
 import TemplateFactory from './TemplateFactory';
 import { getGlobalConfig } from '../utils/globalConfig';
@@ -23,9 +23,10 @@ interface IProps extends ItemProps {
 const { HIDDEN } = ITEMTYPES;
 
 export default (props: IProps) => {
-    const { data, options } = props;
+    const { data, options, form } = props;
     const { formItemProps = {} } = data;
 
+    // @ts-ignore
     const hasDep =
         Array.isArray(formItemProps.dependencies) && formItemProps.dependencies.length > 0;
 
@@ -39,7 +40,8 @@ export default (props: IProps) => {
         const realType = `${type}`.toLowerCase();
         let template4Render = TemplateFactory({
             ...props,
-            data: config
+            data: config,
+            form
         });
         const globalConfig = getGlobalConfig();
         const getColTemplate = () => {
@@ -76,7 +78,11 @@ export default (props: IProps) => {
      */
     if (hasDep) {
         return (
-            <FormItem dependencies={formItemProps.dependencies} noStyle>
+            <FormItem
+                // @ts-ignore
+                dependencies={formItemProps.dependencies}
+                noStyle
+            >
                 {(form: FormInstance) => {
                     const config = transformConfig(data, options, form);
                     const newConfig = extend(true, {}, config, {

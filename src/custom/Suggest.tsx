@@ -16,7 +16,7 @@ interface Props {
     [name: string]: any;
 }
 
-const throttle = (fn, wait = 100) => {
+const throttle = (fn, wait = 1000) => {
     let timer;
 
     return (...args) => {
