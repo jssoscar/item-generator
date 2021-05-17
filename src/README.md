@@ -3,11 +3,23 @@
 
 ## Changelog
 
+### 0.7.8
+
+-   index.d.ts：优化ItemGenerator导出定义
+
+### 0.7.7
+
+-   优化全局导出配置
+
+### 0.7.6
+
+-   index.d.ts： 修复导出异常的warning
+
 ### 0.7.5
 
 -   修改index.d.ts默认导出
 
--   注册邮件：优化formwardRef组件处理
+-   注册组件：优化formwardRef组件处理
 
 ### 0.7.4
 
