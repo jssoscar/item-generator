@@ -5,7 +5,7 @@
  * @Description
  */
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import ItemProps from './components/ItemProps';
 
 /** 设置全局配置 */
