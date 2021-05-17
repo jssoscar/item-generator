@@ -5,6 +5,9 @@
  * @Description
  */
 
+import React, { PureComponent } from 'react';
+import ItemProps from './components/ItemProps';
+
 /** 设置全局配置 */
 export { setGlobalConfig } from './utils/globalConfig';
 
@@ -14,5 +17,10 @@ export { register, unregister } from './utils/registerComponent';
 /** 重塑表单对象 */
 export { rebuildForm } from './utils/formAPI';
 
-/** 导出默认组件属性 */
-export * from './components/ItemProps';
+/** 导出ItemProps */
+export { ItemProps, Options, Config, SingleItem } from './components/ItemProps';
+
+/** 导出ItemGenerator */
+type ItemGenerator = (props: ItemProps) => React.ReactNode;
+
+export default ItemGenerator;

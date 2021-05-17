@@ -4,6 +4,18 @@
 
 ## Changelog
 
+### 0.5.8
+
+-   index.d.ts：优化ItemGenerator导出定义
+
+### 0.5.7
+
+-   优化全局导出配置
+
+### 0.5.6
+
+-   修复导出异常的warning
+
 ### 0.5.5
 
 -   修改index.d.ts默认导出
