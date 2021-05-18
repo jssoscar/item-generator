@@ -3,6 +3,14 @@
 
 ## Changelog
 
+### 0.8.1
+
+-   Style：增加rate评分类型
+
+### 0.8.0
+
+-   内置类型：增加rate评分类型
+
 ### 0.7.8
 
 -   index.d.ts：优化ItemGenerator导出定义

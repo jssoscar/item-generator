@@ -16,7 +16,8 @@ import {
     Radio,
     TimePicker,
     Cascader,
-    TreeSelect
+    TreeSelect,
+    Rate
 } from 'antd';
 import { ITEMTYPES } from './const';
 import buildSelect from '../utils/buildSelect';
@@ -62,7 +63,9 @@ const {
     TIMEPICKER,
 
     CASCADER,
-    HTML
+    HTML,
+
+    RATE
 } = ITEMTYPES;
 
 export default ({ data, options, form }) => {
@@ -148,7 +151,8 @@ export default ({ data, options, form }) => {
         [MONTHPICKER]: <MonthPicker {...defaultStyle} {...defaultProps} />,
         [TIMEPICKER]: <TimePicker {...defaultStyle} {...defaultProps} />,
 
-        [CASCADER]: <Cascader {...defaultStyle} {...defaultProps} options={itemOptions} />
+        [CASCADER]: <Cascader {...defaultStyle} {...defaultProps} options={itemOptions} />,
+        [RATE]: <Rate {...props} />
     };
 
     const renderField = (template) =>

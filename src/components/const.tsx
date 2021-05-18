@@ -41,7 +41,9 @@ export const ITEMTYPES = {
     TIMEPICKER: 'timepicker',
 
     CASCADER: 'cascader',
-    HTML: 'html'
+    HTML: 'html',
+
+    RATE: 'rate'
 };
 
 /**
