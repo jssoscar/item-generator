@@ -44,7 +44,9 @@ export const ITEMTYPES = {
     YEARPICKER: 'yearpicker',
 
     CASCADER: 'cascader',
-    HTML: 'html'
+    HTML: 'html',
+
+    RATE: 'rate'
 };
 
 /**

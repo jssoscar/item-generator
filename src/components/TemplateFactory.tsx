@@ -17,6 +17,7 @@ import {
     TimePicker,
     Cascader,
     TreeSelect,
+    Rate,
     Form
 } from 'antd';
 import { ITEMTYPES } from './const';
@@ -67,7 +68,9 @@ const {
     YEARPICKER,
 
     CASCADER,
-    HTML
+    HTML,
+
+    RATE
 } = ITEMTYPES;
 
 export default ({ data, options, form }) => {
@@ -174,7 +177,8 @@ export default ({ data, options, form }) => {
         [TIMEPICKER]: <TimePicker {...defaultStyle} {...defaultProps} />,
         [YEARPICKER]: <YearPicker {...defaultStyle} {...defaultProps} />,
 
-        [CASCADER]: <Cascader {...defaultStyle} {...defaultProps} options={itemOptions} />
+        [CASCADER]: <Cascader {...defaultStyle} {...defaultProps} options={itemOptions} />,
+        [RATE]: <Rate {...props} />
     };
 
     // 用户：注册组件

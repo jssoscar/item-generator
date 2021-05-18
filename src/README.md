@@ -4,6 +4,14 @@
 
 ## Changelog
 
+### 0.6.0
+
+-   内置类型：增加rate评分类型
+
+### 0.5.9
+
+-   修改默认导出配置
+
 ### 0.5.8
 
 -   index.d.ts：优化ItemGenerator导出定义

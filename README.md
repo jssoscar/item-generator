@@ -712,7 +712,7 @@ register('city', City);
 | id | 表单项ID | string/number/string[]/number[] | - | 否 |
 | label | 表单label | ReactNode | '' | 否 |
 | name | 表单名称。<a href="#常见问题">为何提供name配置？</a> | string | '' | 否 |
-| type | 表单类型（<strong className="red">忽略大小写</strong>）。现有类型：<div>text/hidden/input.trim/password/select/treeselect/number</div><div>textarea/textarea.trim/switch/slider/checkbox/checkboxgroup</div><div>radio/radiogroup/radiogroupbutton/rangepicker/yearpicker</div><div>cascader/datepicker/weekpicker/monthpicker/timepicker</div><div>html/suggest</div> | string | input.trim | 否 |
+| type | 表单类型（<strong className="red">忽略大小写</strong>）。现有类型：<div>text/hidden/input.trim/password/select/treeselect/number</div><div>textarea/textarea.trim/switch/slider/checkbox/checkboxgroup</div><div>radio/radiogroup/radiogroupbutton/rangepicker/yearpicker</div><div>cascader/datepicker/weekpicker/monthpicker/timepicker</div><div>html/suggest/rate</div> | string | input.trim | 否 |
 | props | 表单元素属性，类似<a href="https://ant.design/components/select-cn/#Select-props" target="_blank">Select</a>。 | object | {} | 否 |
 | descriptionProps | 查看态元素样式（属性参考：<a href="https://ant.design/components/descriptions-cn/#DescriptionItem" target="_blank">DescriptionItem</a>）| object | {} | 否 |
 | template | 自定义渲染模板，如果未设置则默认为input.trim类型 | <div>ReactNode</div><div>string（html类型建议传递类型为string类型）</div>| null | 否 |

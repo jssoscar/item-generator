@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 import { Options } from './ItemProps';
-import { Descriptions } from 'antd';
+import { Descriptions, Rate } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { ITEMTYPES } from './const';
 import DangerHtml from '../custom/DangerHtml';
@@ -16,7 +16,7 @@ import { getGlobalConfig } from '../utils/globalConfig';
 import filterValue from '../utils/filterValue';
 import { getRegisteredComponent } from '../utils/registerComponent';
 
-const { HTML } = ITEMTYPES;
+const { HTML, RATE } = ITEMTYPES;
 
 const { Item: DescItem } = Descriptions;
 
@@ -70,22 +70,25 @@ class ViewItem extends Component<IProps> {
                         <RegisteredComponent form={form} status={0} {...props} />
                     ) : null;
 
-                    let dangerHtmlTemplate: any = null;
+                    let defaultTypeTemplate: any = null;
                     // html类型，只能支持到html结构的展示，通过DangerHtml包装
                     if (realType === HTML) {
                         const html = template || dataValue;
                         if (typeof html === 'string') {
-                            dangerHtmlTemplate = <DangerHtml html={html} {...props} />;
+                            defaultTypeTemplate = <DangerHtml html={html} {...props} />;
                         } else {
                             // html类型非表单元素，则直接返回模板或者当前值
                             console.warn('type为html类型时，建议template设置为string类型!');
-                            dangerHtmlTemplate = html;
+                            defaultTypeTemplate = html;
                         }
+                    } // 评分类型
+                    else if (realType === RATE) {
+                        defaultTypeTemplate = <Rate {...props} disabled defaultValue={dataValue} />;
                     }
                     // 最终展示的文案
                     let content =
                         registeredComponentTemplate ||
-                        dangerHtmlTemplate ||
+                        defaultTypeTemplate ||
                         template ||
                         filterValue({
                             data,
