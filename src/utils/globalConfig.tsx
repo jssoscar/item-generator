@@ -21,6 +21,8 @@ export interface Config {
     extends?: {
         [key: string]: Omit<ItemConfig, 'logic' | 'extend'>;
     };
+    /** 全局配置antd组件默认属性 */
+    itemProvider?: Object;
     [name: string]: any;
 }
 
@@ -35,7 +37,8 @@ let GLOBAL_CONFIG = {
     colProps: {},
     descriptionsProps: {},
     emptyText: '无',
-    extends: {}
+    extends: {},
+    itemProvider: {}
 };
 
 let GLOBAL_COUNT = 1;

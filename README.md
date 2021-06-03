@@ -98,6 +98,22 @@ setGlobalConfig({
                 rules: []
             }
         }
+    },
+    itemProvider: {
+        select: {
+            allowClear: true // 允许清除，antd默认不允许清除
+        },
+        input: {
+            allowClear: true
+        },
+        textarea: { // 修改textarea的默认属性为最小4行
+            autoSize: {
+                minRows: 4
+            }
+        },
+        rate: { // 设置全局Rate类型tooltip
+            tooltips: ['差', '一般', '好', '很好', '完美']
+        }
     }
 });
 
@@ -574,9 +590,23 @@ export default Form.create()(Test);
 
 #### config.logic
 
+此场景下，建议配置一些常用布局、必填的常规配置，这样不需要每个元素进行配置规则。 具体参考<a href="#Logic">Logic</a>
+
+#### config.extends
+
 此场景下，建议配置一些常用布局、必填的常规配置，这样不需要每个元素进行配置规则
 
-具体参考<a href="#Logic">Logic</a>
+| 参数名 | 说明 | 类型 | 默认值 | 必需 |
+| -------- | ----------- | ---- | ------- | --------- |
+| 规则key | key所对应的配置，具体参考<a href="#Config">Config</a> | object | {} | 否 |
+
+#### config.itemProvider
+
+内置类型的属性配置。全局组件配置，可以配置内部基础类型组件属性。这里建议配置antd基本组件属性。
+
+| 参数名 | 说明 | 类型 | 默认值 | 必需 |
+| -------- | ----------- | ---- | ------- | --------- |
+| 类型key | type所对应的配置，具体参考<a href="#Config">Config</a> | object | {} | 否 |
 
 
 ### 全局配置demo
@@ -615,6 +645,22 @@ setGlobalConfig({
                     }
                 ]
             }
+        }
+    },
+    itemProvider: {
+        select: {
+            allowClear: true // 允许清除，antd默认不允许清除
+        },
+        input: {
+            allowClear: true
+        },
+        textarea: { // 修改textarea的默认属性为最小4行
+            autoSize: {
+                minRows: 4
+            }
+        },
+        rate: { // 设置全局Rate类型tooltip
+            tooltips: ['差', '一般', '好', '很好', '完美']
         }
     }
 });

@@ -25,7 +25,7 @@ import buildSelect from '../utils/buildSelect';
 import translateOption from '../utils/translateOption';
 import WithTrim from '../custom/WithTrim';
 import DangerHtml from '../custom/DangerHtml';
-import { getInitialValue, getMiddleId } from './utils';
+import { getInitialValue, getMiddleId, getParsedProps } from './utils';
 import Suggest from '../custom/Suggest';
 import { getGlobalConfig } from '../utils/globalConfig';
 import { getRegisteredComponent } from '../utils/registerComponent';
@@ -121,17 +121,12 @@ export default ({ data, options, form }) => {
         formItemParsedProps.valuePropName = 'checked';
     }
 
-    const defaultProps = {
-        placeholder: typeof label != 'object' ? label : '', // label存在为JSX情况，所以JSX不主动设置placeholder
-        ...props
-    };
-
+    const defaultProps = getParsedProps(item);
     const defaultStyle = {
         style: {
             width: '100%'
         }
     };
-
     const itemOptions = translateOption(configData, parsedParams);
 
     const renderFormItem = (template: React.ReactNode) => {
@@ -148,9 +143,9 @@ export default ({ data, options, form }) => {
         [CHECKBOXGROUP]: <CheckboxGroup {...defaultProps} options={itemOptions} />,
 
         [RADIO]: <Radio {...defaultProps} />,
-        [RADIOGROUP]: <RadioGroup {...props} options={itemOptions} />,
+        [RADIOGROUP]: <RadioGroup {...defaultProps} options={itemOptions} />,
         [RADIOGROUPBUTTON]: (
-            <RadioGroup {...props}>
+            <RadioGroup {...defaultProps}>
                 {itemOptions.map(({ label, value, disabled }) => (
                     <RadioButton value={value} key={value} disabled={disabled}>
                         {label}
@@ -162,15 +157,13 @@ export default ({ data, options, form }) => {
         [SWITCH]: <Switch {...defaultProps} />,
         [SLIDER]: <Slider {...defaultProps} />,
 
-        [SELECT]: buildSelect(configData, props, parsedParams),
+        [SELECT]: buildSelect(configData, defaultProps, parsedParams),
         [SUGGEST]: <Suggest {...defaultStyle} {...defaultProps} params={parsedParams} />,
         [TREESELECT]: (
             <TreeSelect {...defaultStyle} allowClear treeData={itemOptions} {...defaultProps} />
         ),
 
-        [RANGEPICKER]: (
-            <RangePicker {...defaultStyle} placeholder={['开始时间', '结束时间']} {...props} />
-        ),
+        [RANGEPICKER]: <RangePicker {...defaultStyle} {...defaultProps} />,
         [DATEPICKER]: <DatePicker {...defaultStyle} {...defaultProps} />,
         [WEEKPICKER]: <WeekPicker {...defaultStyle} {...defaultProps} />,
         [MONTHPICKER]: <MonthPicker {...defaultStyle} {...defaultProps} />,
@@ -178,7 +171,7 @@ export default ({ data, options, form }) => {
         [YEARPICKER]: <YearPicker {...defaultStyle} {...defaultProps} />,
 
         [CASCADER]: <Cascader {...defaultStyle} {...defaultProps} options={itemOptions} />,
-        [RATE]: <Rate {...props} />
+        [RATE]: <Rate {...defaultProps} />
     };
 
     // 用户：注册组件
@@ -194,7 +187,7 @@ export default ({ data, options, form }) => {
 
         // 配置了type: html  且  template为string类型
         if (typeof html === 'string') {
-            return renderFormItem(<DangerHtml html={html} {...props} />);
+            return renderFormItem(<DangerHtml html={html} {...defaultProps} />);
         }
 
         // html类型非表单元素，则直接返回模板或者当前值
