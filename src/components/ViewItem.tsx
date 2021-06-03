@@ -10,7 +10,7 @@ import ItemProps from './ItemProps';
 import { Descriptions, Rate } from 'antd';
 import { ITEMTYPES } from './const';
 import DangerHtml from '../custom/DangerHtml';
-import { getMiddleId } from './utils';
+import { getMiddleId, getParsedProps } from './utils';
 import { getGlobalConfig } from '../utils/globalConfig';
 import filterValue from '../utils/filterValue';
 import { getRegisteredComponent } from '../utils/registerComponent';
@@ -66,8 +66,9 @@ class ViewItem extends Component<ItemProps> {
                     // html类型，只能支持到html结构的展示，通过DangerHtml包装
                     if (realType === HTML) {
                         const html = template || dataValue;
+                        const parsedProps = getParsedProps(item);
                         if (typeof html === 'string') {
-                            defaultTypeTemplate = <DangerHtml html={html} {...props} />;
+                            defaultTypeTemplate = <DangerHtml html={html} {...parsedProps} />;
                         } else {
                             // html类型非表单元素，则直接返回模板或者当前值
                             console.warn('type为html类型时，建议template设置为string类型!');
@@ -75,7 +76,10 @@ class ViewItem extends Component<ItemProps> {
                         }
                     } // 评分类型
                     else if (realType === RATE) {
-                        defaultTypeTemplate = <Rate {...props} disabled defaultValue={dataValue} />;
+                        const parsedProps = getParsedProps(item);
+                        defaultTypeTemplate = (
+                            <Rate {...parsedProps} disabled defaultValue={dataValue} />
+                        );
                     }
 
                     // 最终展示的文案

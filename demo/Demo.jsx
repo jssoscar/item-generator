@@ -56,6 +56,22 @@ setGlobalConfig({
                 }
             }
         }
+    },
+    itemProvider: {
+        select: {
+            allowClear: true
+        },
+        input: {
+            allowClear: true
+        },
+        textarea: {
+            autoSize: {
+                minRows: 4
+            }
+        },
+        rate: {
+            tooltips: ['差', '一般', '好', '很好', '完美']
+        }
     }
 });
 

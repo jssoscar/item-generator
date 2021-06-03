@@ -99,7 +99,7 @@ export const wrapBuildOptions = (data, props: IProps, options: IOptions) => {
     // 空数据
     if ((!data || !length) && !isMultiple) {
         return (
-            <Select placeholder={emptyText} allowClear {...props}>
+            <Select placeholder={emptyText} {...props}>
                 {showPleaseSel && <Option value={pleaseSelValue}>{emptyText}</Option>}
                 {buildOptions(data, options)}
             </Select>
@@ -134,14 +134,14 @@ export const wrapBuildOptions = (data, props: IProps, options: IOptions) => {
     //多选的时候请选择要去掉 不然会报错
     if (isMultiple) {
         return (
-            <Select placeholder="多选类型" allowClear {...props}>
+            <Select placeholder="多选类型" {...props}>
                 {buildOptions(data, options)}
             </Select>
         );
     }
 
     return (
-        <Select placeholder={emptyText} allowClear {...props}>
+        <Select placeholder={emptyText} {...props}>
             {showPleaseSel && <Option value={pleaseSelValue}>{emptyText}</Option>}
             {buildOptions(data, options)}
         </Select>

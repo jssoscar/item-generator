@@ -1,8 +1,8 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:52:04 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:52:04
+ * @Version			1.0
+ * @Description
  */
 
 import { Config as ItemConfig } from '../components/ItemProps';
@@ -21,6 +21,8 @@ export interface Config {
     extends?: {
         [key: string]: Omit<ItemConfig, 'logic' | 'extend'>;
     };
+    /** 全局配置antd组件默认属性 */
+    itemProvider?: Object;
     [name: string]: any;
 }
 
@@ -36,14 +38,15 @@ let GLOBAL_CONFIG = {
     colProps: {},
     descriptionsProps: {},
     emptyText: '无',
-    extends: {}
+    extends: {},
+    itemProvider: {}
 };
 
 let GLOBAL_COUNT = 1;
 
 /**
  * 设置全局配置
- * 
+ *
  * @param config ： 全局配置
  */
 export const setGlobalConfig = (config: Config = {}) => {
