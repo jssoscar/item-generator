@@ -3,6 +3,9 @@
 
 ## Changelog
 
+### 0.8.4
+
+-   Select类型：shouldOptionDisabled增加当前options、当前配置数据参数传递
 ### 0.8.3
 
 -   查看组件： 增加html/rate类型组件的全局属性配置处理
