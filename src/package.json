@@ -1,6 +1,6 @@
 {
     "name": "item-generator4",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "description": "基于antd 4的react表单配置方案",
     "main": "index.js",
     "title": "item-generator4",

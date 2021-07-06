@@ -26,7 +26,7 @@ export interface SingleItem extends Empty {
     /** formItem文案，默认也会将label设置为placeholder */
     label?: React.ReactNode;
     /** 表单ID */
-    id?: string | number | string[] | number[];
+    id?: string | number | (string | number)[];
     /**
      *  对于详情数据，以业务线字段(bizType)为例：新增/编辑数据为0/1，查看则返回的(bizTypeName|bizTypeText)类似此字段名。
      *  一般后端为了方便维护，会使用单model维护，所以在新增/编辑/查看状态配置的id需要不同。

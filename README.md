@@ -792,7 +792,7 @@ Antd 4版本，表单局部更新方式，因此需要依赖某字段需要更�
 | -------- | ----------- | ---- | ------- | --------- | ---------- |
 | label | options中label属性key | string | 'value' | 否 |
 | value | options中value属性key | string | 'id' | 否 |
-| shouldOptionDisabled | 选项是否为disabled，参数名当前数据项value | function | () => false | 否 |
+| shouldOptionDisabled | 选项是否为disabled，参数名当前数据项value | function | (value, 当前option, 当前配置数组数据) => false | 否 |
 
 
 ### Select.Params

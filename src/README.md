@@ -4,6 +4,11 @@
 
 ## Changelog
 
+### 0.6.4
+
+-   Select类型：shouldOptionDisabled增加当前options、当前配置数据参数传递
+
+-   属性类型定义：修复id类型为antd NamePath类型
 ### 0.6.3
 
 -   查看组件： 增加html/rate类型组件的全局属性配置处理

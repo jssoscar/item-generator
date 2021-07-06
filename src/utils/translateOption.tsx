@@ -10,7 +10,7 @@ const SIMPLETYPES = ['String', 'Number'];
 interface Options {
     label?: string;
     value?: string;
-    shouldOptionDisabled?: (val: any) => boolean;
+    shouldOptionDisabled?: (val: any, config: any, data: any[]) => boolean;
     [name: string]: any;
 }
 
@@ -37,7 +37,7 @@ const translate = (data: any, options?: Options) => {
                 title: cur
             };
             if (shouldOptionDisabled) {
-                result.disabled = shouldOptionDisabled(cur) === true;
+                result.disabled = shouldOptionDisabled(cur, cur, data) === true;
             }
             return result;
         }
@@ -49,7 +49,7 @@ const translate = (data: any, options?: Options) => {
         };
 
         if (shouldOptionDisabled) {
-            result.disabled = shouldOptionDisabled(cur[value]) === true;
+            result.disabled = shouldOptionDisabled(cur[value], cur, data) === true;
         }
 
         if (cur[children] && Array.isArray(cur[children])) {
