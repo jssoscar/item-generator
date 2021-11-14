@@ -4,6 +4,13 @@
 
 ## Changelog
 
+### 0.6.6
+
+-   Select类型：优化Option组件key处理
+
+### 0.6.5
+
+-   Select类型：支持配置Option组件key
 ### 0.6.4
 
 -   Select类型：shouldOptionDisabled增加当前options、当前配置数据参数传递

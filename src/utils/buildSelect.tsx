@@ -20,6 +20,8 @@ interface IOptions {
     label?: string;
     /** value属性key */
     value?: string;
+    /** Option组件key */
+    key?: any;
     /** 是否展示默认'请选择'  */
     showPleaseSel?: boolean;
     /** 【请选择】所对应值 */
@@ -44,14 +46,14 @@ interface IProps {
  * @param {Array} data : select配置数据
  * @param {Object} options : 展示配置项
  */
-const buildOption = (data, options: IOptions) => {
-    const { showTooltip = false, tooltip = 'remark', tooltipProps = {} } = options;
+const buildOption = (data, options: IOptions, index = 0) => {
+    const { showTooltip = false, tooltip = 'remark', tooltipProps = {}, key = 'value' } = options;
 
     const { value, label, disabled } = data;
     const optionTooltip = data[tooltip];
 
     return (
-        <Option key={value} value={value} disabled={disabled}>
+        <Option key={`${value}-${index}`} value={value} disabled={disabled}>
             {showTooltip && optionTooltip ? (
                 <Tooltip title={optionTooltip} {...tooltipProps}>
                     {label}
@@ -71,15 +73,15 @@ const buildOption = (data, options: IOptions) => {
 const buildOptions = (data, options: IOptions) => {
     const { optGroup = false } = options;
 
-    return data.map((cur) => {
+    return data.map((cur, index) => {
         const { value, label, children } = cur;
 
         return optGroup && Array.isArray(children) ? (
             <OptGroup key={value} label={label}>
-                {children.map((child) => buildOption(child, options))}
+                {children.map((child) => buildOption(child, options, index))}
             </OptGroup>
         ) : (
-            buildOption(cur, options)
+            buildOption(cur, options, index)
         );
     });
 };
