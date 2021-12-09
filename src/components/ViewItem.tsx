@@ -10,7 +10,7 @@ import ItemProps from './ItemProps';
 import { Descriptions, Rate } from 'antd';
 import { ITEMTYPES } from './const';
 import DangerHtml from '../custom/DangerHtml';
-import { getMiddleId, getParsedProps } from './utils';
+import { getParsedProps, getInitialValue } from './utils';
 import { getGlobalConfig } from '../utils/globalConfig';
 import filterValue from '../utils/filterValue';
 import { getRegisteredComponent } from '../utils/registerComponent';
@@ -54,7 +54,7 @@ class ViewItem extends Component<ItemProps> {
                         data = []
                     } = item;
                     const realType = `${type}`.toLowerCase();
-                    const dataValue = initData[getMiddleId(name || id)];
+                    const { initialValue } = getInitialValue(name || id, initData);
 
                     // 用户：注册组件
                     const RegisteredComponent = getRegisteredComponent()[realType];
@@ -65,7 +65,7 @@ class ViewItem extends Component<ItemProps> {
                     let defaultTypeTemplate: any = null;
                     // html类型，只能支持到html结构的展示，通过DangerHtml包装
                     if (realType === HTML) {
-                        const html = template || dataValue;
+                        const html = template || initialValue;
                         const parsedProps = getParsedProps(item);
                         if (typeof html === 'string') {
                             defaultTypeTemplate = <DangerHtml html={html} {...parsedProps} />;
@@ -78,7 +78,7 @@ class ViewItem extends Component<ItemProps> {
                     else if (realType === RATE) {
                         const parsedProps = getParsedProps(item);
                         defaultTypeTemplate = (
-                            <Rate {...parsedProps} disabled defaultValue={dataValue} />
+                            <Rate {...parsedProps} disabled defaultValue={initialValue} />
                         );
                     }
 
@@ -89,7 +89,7 @@ class ViewItem extends Component<ItemProps> {
                         template ||
                         filterValue({
                             data,
-                            value: dataValue,
+                            value: initialValue,
                             type: realType,
                             params: { ...globalConfig.params, ...params }
                         });

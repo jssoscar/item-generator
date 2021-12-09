@@ -10,7 +10,7 @@ import { ItemProps, Config } from './ItemProps';
 import { Col, Form } from 'antd';
 import TemplateFactory from './TemplateFactory';
 import { ITEMTYPES } from './const';
-import { getInitialValue, getMiddleId } from './utils';
+import { getInitialValue } from './utils';
 import { extend } from '../utils/logic';
 import { getGlobalConfig } from '../utils/globalConfig';
 
@@ -47,8 +47,7 @@ class Item extends PureComponent<IProps> {
 
         // hidden类型
         if (realType === HIDDEN) {
-            const middleId = getMiddleId(item.id);
-            const { initialValue } = getInitialValue(HIDDEN, (options.data || {})[middleId]);
+            const { initialValue } = getInitialValue(item.id, options.data, HIDDEN);
             getFieldDecorator(item.id, {
                 initialValue,
                 ...item.options

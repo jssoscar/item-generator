@@ -20,7 +20,8 @@
     "typings": "index.d.ts",
     "license": "MIT",
     "dependencies": {
-        "moment": "*"
+        "moment": "*",
+        "lodash.get": "^4.3.2"
     },
     "devDependencies": {}
 }

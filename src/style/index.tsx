@@ -20,3 +20,4 @@ import 'antd/lib/switch/style/index.css';
 import 'antd/lib/time-picker/style/index.css';
 import 'antd/lib/tooltip/style/index.css';
 import 'antd/lib/cascader/style/index.css';
+import 'antd/lib/rate/style/index.css';

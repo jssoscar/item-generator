@@ -149,7 +149,7 @@ class Test extends PureComponent {
                 },
                 {
                     item: {
-                        id: 'name',
+                        id: 'driver.name',
                         label: 'input基础类型',
                         options: {
                             rules: [
@@ -407,6 +407,13 @@ class Test extends PureComponent {
                     }
                 },
                 {
+                    item: {
+                        id: 'rate',
+                        label: '评分',
+                        type: 'rate'
+                    }
+                },
+                {
                     colProps: {
                         span: 24
                     },
@@ -449,7 +456,9 @@ class Test extends PureComponent {
             ],
             status,
             data: {
-                name: '测试账号',
+                driver: {
+                    name: '测试账号'
+                },
                 age: -1,
                 ageMulit: [1, 10],
                 ageGroup: 20,
@@ -458,7 +467,8 @@ class Test extends PureComponent {
                 treeselect: 1,
                 checkboxgroup: [1, 2],
                 radiogroupbutton: [1, 2],
-                text: '自定义文本'
+                text: '自定义文本',
+                rate: 2
             },
             colable,
             logic: {

@@ -26,7 +26,7 @@ import WithTrim from '../custom/WithTrim';
 import DangerHtml from '../custom/DangerHtml';
 import { getGlobalConfig } from '../utils/globalConfig';
 import { getRegisteredComponent } from '../utils/registerComponent';
-import { getInitialValue, getMiddleId, getParsedProps } from './utils';
+import { getInitialValue, getParsedProps } from './utils';
 import Suggest from '../custom/Suggest';
 
 const { TextArea } = Input;
@@ -64,7 +64,6 @@ const {
 
     CASCADER,
     HTML,
-
     RATE
 } = ITEMTYPES;
 
@@ -75,20 +74,18 @@ export default ({ data, options, form }) => {
     const {
         id = '',
         type = INPUT_TRIM,
-        label,
         data: configData,
         params = {},
         props,
         formable = true
     } = item;
     const realType = `${type}`.toLowerCase();
-    const initValue = initData[getMiddleId(id)];
-    let formOptions: { [name: string]: any } = getInitialValue(realType, initValue);
+    let formOptions: { [name: string]: any } = getInitialValue(id, initData, type);
+    const { initialValue } = formOptions;
 
     /**
      * checkbox/switch时，如果不设置valuePropName属性，再表单中无法重置数据
      */
-
     if ([CHECKBOX, SWITCH].includes(realType)) {
         formOptions.valuePropName = 'checked';
     }
@@ -100,12 +97,10 @@ export default ({ data, options, form }) => {
         }
     };
     const globalConfig = getGlobalConfig();
-
     const parsedParams = {
         ...globalConfig.params,
         ...params
     };
-
     const itemOptions = translateOption(configData, parsedParams);
 
     const TYPES = {
@@ -118,7 +113,7 @@ export default ({ data, options, form }) => {
         [CHECKBOXGROUP]: <CheckboxGroup {...defaultProps} options={itemOptions} />,
 
         [RADIO]: <Radio {...defaultProps} />,
-        [RADIOGROUP]: <RadioGroup {...props} options={itemOptions} />,
+        [RADIOGROUP]: <RadioGroup {...defaultProps} options={itemOptions} />,
         [RADIOGROUPBUTTON]: (
             <RadioGroup {...defaultProps}>
                 {itemOptions.map(({ label, value, disabled }) => (
@@ -132,7 +127,7 @@ export default ({ data, options, form }) => {
         [SWITCH]: <Switch {...defaultProps} />,
         [SLIDER]: <Slider {...defaultProps} />,
 
-        [SELECT]: buildSelect(configData, props, parsedParams),
+        [SELECT]: buildSelect(configData, defaultProps, parsedParams),
         [SUGGEST]: <Suggest {...defaultStyle} {...defaultProps} params={parsedParams} />,
         [TREESELECT]: <TreeSelect {...defaultStyle} treeData={itemOptions} {...defaultProps} />,
 
@@ -162,7 +157,7 @@ export default ({ data, options, form }) => {
 
     // HTML类型
     if (realType === HTML) {
-        const html = item.template || initValue;
+        const html = item.template || initialValue;
 
         // 配置了type: html  且  template为string类型
         if (typeof html === 'string') {
@@ -176,7 +171,7 @@ export default ({ data, options, form }) => {
 
     // 文字节点
     if (realType === TEXT) {
-        let content = initValue;
+        let content = initialValue;
         // 空字符串处理
         typeof content === 'string' && (content = content.trim());
 

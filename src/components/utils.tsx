@@ -1,12 +1,13 @@
 /*
  * @Author			jssoscar
- * @Date			2021-02-01 11:59:16 
- * @Version			1.0 
- * @Description	
+ * @Date			2021-02-01 11:59:16
+ * @Version			1.0
+ * @Description
  */
 
 import { ITEMTYPES } from './const';
 import Moment from 'moment';
+import get from 'lodash.get';
 import { getGlobalConfig } from '../utils/globalConfig';
 import { SingleItem } from './ItemProps';
 
@@ -28,24 +29,40 @@ const {
  * @param value ： 值
  * @returns
  */
-export const getInitialValue = (type, value) => {
-    if (value === undefined) {
-        return {};
+export const getInitialValue = (id, data, type?) => {
+    // 数据为{a: {b: {c : 1}}}，id为：a.b.c场景的处理
+    let initialValue = get(data || {}, id);
+
+    if (initialValue == undefined) {
+        const getMiddleId = (id) => {
+            try {
+                const blocks = id.split('.').reverse();
+                return blocks[0];
+            } catch (e) {
+                return id;
+            }
+        };
+
+        // 数据为{a: 1}，id为：a 场景的处理
+        const middleId = getMiddleId(id);
+        initialValue = data[middleId];
     }
 
-    let initialValue: any = value;
+    if (initialValue == undefined) {
+        return {};
+    }
 
     try {
         if ([RANGEPICKER, DATEPICKER, WEEKPICKER, MONTHPICKER, TIMEPICKER].includes(type)) {
             // range picker
             if (type === RANGEPICKER) {
-                if (Array.isArray(value)) {
-                    initialValue = value.map((val) => (val ? Moment(val) : null));
+                if (Array.isArray(initialValue)) {
+                    initialValue = initialValue.map((val) => (val ? Moment(val) : null));
                 } else {
                     initialValue = null;
                 }
             } else {
-                initialValue = value ? Moment(value) : null;
+                initialValue = initialValue ? Moment(initialValue) : null;
             }
         }
     } catch (e) {}
@@ -53,21 +70,6 @@ export const getInitialValue = (type, value) => {
     return {
         initialValue
     };
-};
-
-/**
- * 获取真实id
- *
- * @param id ： 当前配置id
- * @returns
- */
-export const getMiddleId = (id) => {
-    try {
-        const blocks = id.split('.').reverse();
-        return blocks[0];
-    } catch (e) {
-        return id;
-    }
 };
 
 /**
