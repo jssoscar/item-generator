@@ -143,7 +143,7 @@ export default () => {
                     dependencies: ['age']
                 },
                 item: {
-                    id: 'name',
+                    id: ['driver', 'name'],
                     label: 'input基础类型'
                 },
                 logic: 'nameNotRequired',
@@ -475,7 +475,9 @@ export default () => {
         ],
         status,
         data: {
-            name: '测试账号',
+            driver: {
+                name: '测试账号'
+            },
             age: 1,
             ageMulit: [1, 2],
             ageGroup: 20,

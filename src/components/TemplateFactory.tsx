@@ -25,7 +25,7 @@ import buildSelect from '../utils/buildSelect';
 import translateOption from '../utils/translateOption';
 import WithTrim from '../custom/WithTrim';
 import DangerHtml from '../custom/DangerHtml';
-import { getInitialValue, getMiddleId, getParsedProps } from './utils';
+import { getInitialValue, getParsedProps } from './utils';
 import Suggest from '../custom/Suggest';
 import { getGlobalConfig } from '../utils/globalConfig';
 import { getRegisteredComponent } from '../utils/registerComponent';
@@ -85,8 +85,8 @@ export default ({ data, options, form }) => {
         props,
         formable = true
     } = item;
-    let initialValue = getInitialValue(type, initData[getMiddleId(id)]);
     const realType = `${type}`.toLowerCase();
+    let initialValue = getInitialValue(id, initData, realType);
     const globalConfig = getGlobalConfig();
     const parsedParams = {
         ...globalConfig.params,

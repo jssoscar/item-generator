@@ -1,6 +1,6 @@
 {
     "name": "item-generator4",
-    "version": "0.6.6",
+    "version": "0.6.7",
     "description": "基于antd 4的react表单配置方案",
     "main": "index.js",
     "title": "item-generator4",
@@ -20,7 +20,9 @@
     "typings": "index.d.ts",
     "license": "MIT",
     "dependencies": {
-        "moment": "*"
+        "lodash.set": "^4.3.2",
+        "lodash.get": "^4.3.2",
+        "moment": "^2.29.1"
     },
     "devDependencies": {}
 }

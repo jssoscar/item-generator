@@ -732,7 +732,7 @@ register('city', City);
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- |
 | status | 表单状态（0：查看态，1：编辑态） | number | 1 | 否 |
-| data | 表单初始化数据 | object | {} | 否 |
+| data | 表单初始化数据，支持'a.b.c', ['a','b','c'], 'a'情况的数据处理 | object | {} | 否 |
 | colProps | colable为true，则应用此配置（属性参考<a href="https://ant.design/components/grid-cn/#Col" target="_blank">Col</a>） | object | {} | 否 |
 | descriptionsProps | 查看状态下，描述列表配置（属性参考<a href="https://ant.design/components/descriptions-cn/#Descriptions" target="_blank">Descriptions</a>） | object | {}| 否 |
 | colable | 是否以Col封装 | boolean | false | 否 |
