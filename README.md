@@ -1,6 +1,6 @@
-# item-generator
+# item-generator4
 
-* 基于antd 3.0表单方案，从API使用转化为JSON配置化，提升开发效率
+* 基于antd 4.0表单方案，从API使用转化为JSON配置化，提升开发效率
 
 * 类型增强：增加了input.trim、textarea.trim两种trim类型，内置text文本、hidden、html、suggest类型
 
@@ -8,7 +8,7 @@
 
 * 支持基础的表单类型配置、表单级联
 
-* 支持注册自定义类型组件及hooks组件、组件自定义模板
+* 支持注册自定义类型组件、组件自定义模板
 
 * 拉平数据类型处理(如：moment类型)
 
@@ -18,22 +18,22 @@
 
 ## 如何使用？
 
-* PS：请确保已经安装React / Antd <strong className="red">3.19.0以上版本</strong>
+* PS：请确保已经安装React / Antd <strong className="red">4.0以上版本</strong>
 
 ```bash
-npm i item-generator@latest -S
+npm i item-generator4@latest -S
 ```
 
 ### css引用
 
 <p><strong className="red">特别注意</strong></p>
 <p>使用了babel-import插件来进行antd的异步加载，代码层次需要引入style模块</p>
-<p>否则babel-import无法加载item-generator中引用到的antd组件样式</p>
+<p>否则babel-import无法加载item-generator4中引用到的antd组件样式</p>
 <p>反之，如果代码直接 import 'antd/dist/antd.(css|less)'这种全量引入，则不需要引入</p>
 
 ```jsx
  // 项目入口引用一次即可，保证antd的babel-import样式是引入的
- import 'item-generator/style'
+ import 'item-generator4/style'
 ```
 
 
@@ -41,7 +41,7 @@ npm i item-generator@latest -S
 
 ```jsx
 import React from 'react';
-import ItemGenerator from 'item-generator';
+import ItemGenerator from 'item-generator4';
 
 <ItemGenerator form={form} options={{
     config: []
@@ -58,8 +58,8 @@ import { Form, Button, Row } from 'antd';
 import City from './City';
 import Hooks from './Hooks';
 
-import ItemGenerator, { setGlobalConfig, register } from 'item-generator';
-import 'item-generator/style';
+import ItemGenerator, { setGlobalConfig, register } from 'item-generator4';
+import 'item-generator4/style';
 
 setGlobalConfig({
     params: {
@@ -74,35 +74,45 @@ setGlobalConfig({
     emptyText: '--',
     extends: {
         inputRequired: {
-            item: {
-                options: {
-                    rules: [
-                        {
-                            required: true,
-                            message: '请输入'
-                        }
-                    ]
-                }
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入'
+                    }
+                ]
             }
         },
         selectRequired: {
-            item: {
-                options: {
-                    rules: [
-                        {
-                            required: true,
-                            message: '请选择'
-                        }
-                    ]
-                }
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '请选择'
+                    }
+                ]
             }
         },
         notRequired: {
-            item: {
-                options: {
-                    rules: []
-                }
+            formItemProps: {
+                rules: []
             }
+        }
+    },
+    itemProvider: {
+        select: {
+            allowClear: true // 允许清除，antd默认不允许清除
+        },
+        input: {
+            allowClear: true
+        },
+        textarea: { // 修改textarea的默认属性为最小4行
+            autoSize: {
+                minRows: 4
+            }
+        },
+        rate: { // 设置全局Rate类型tooltip
+            tooltips: ['差', '一般', '好', '很好', '完美']
         }
     }
 });
@@ -180,17 +190,11 @@ class Test extends PureComponent {
                     }
                 },
                 {
+                    formItemProps: {},
+
                     item: {
                         id: 'name',
-                        label: 'input基础类型',
-                        options: {
-                            rules: [
-                                {
-                                    pattern: '/\\d+/',
-                                    message: '请输入有效手机号'
-                                }
-                            ]
-                        }
+                        label: 'input基础类型'
                     },
                     logic: 'nameRequired'
                 },
@@ -202,23 +206,14 @@ class Test extends PureComponent {
                     },
                     logic: {
                         test: '{age} == 1',
-                        extends: 'notRequired'
-                    },
-                    extends: 'inputRequired'
+                        extends: 'inputRequired'
+                    }
                 },
                 {
                     item: {
                         id: 'number',
                         label: '数字(级联)',
-                        type: 'number',
-                        options: {
-                            rules: [
-                                {
-                                    required: true,
-                                    message: '请输入'
-                                }
-                            ]
-                        }
+                        type: 'number'
                     },
                     logic: [
                         {
@@ -487,21 +482,10 @@ class Test extends PureComponent {
             },
             colable,
             logic: {
-                nameRequired: [
-                    {
-                        test: '{age} == 1',
-                        item: {
-                            options: {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入'
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                ]
+                nameRequired: {
+                    test: '{age} == 1',
+                    extend: 'inputRequired'
+                }
             }
         };
 
@@ -604,9 +588,17 @@ export default Form.create()(Test);
 | emptyText | 查看状态下空值(undefined/null)的处理 | string | '无' | 否 |
 
 
+#### config.logic
+
+此场景下，建议配置一些常用布局、必填的常规配置，这样不需要每个元素进行配置规则。 具体参考<a href="#Logic">Logic</a>
+
 #### config.extends
 
-此场景下，建议配置一些常用布局、必填的常规配置，这样不需要每个元素进行配置规则。具体参考<a href="#Logic">Logic</a>
+此场景下，建议配置一些常用布局、必填的常规配置，这样不需要每个元素进行配置规则
+
+| 参数名 | 说明 | 类型 | 默认值 | 必需 |
+| -------- | ----------- | ---- | ------- | --------- |
+| 规则key | key所对应的配置，具体参考<a href="#Config">Config</a> | object | {} | 否 |
 
 #### config.itemProvider
 
@@ -615,16 +607,16 @@ export default Form.create()(Test);
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- |
 | 类型key | type所对应的配置，具体参考<a href="#Config">Config</a> | object | {} | 否 |
+
+
 ### 全局配置demo
 
 ```jsx
-import { setGlobalConfig } from 'item-generator';
+import { setGlobalConfig } from 'item-generator4';
 
 setGlobalConfig({
     params: {
-        showPleaseSel: false, // 不显示select的【请选择】选项
-        label: 'name', // 所有配置类数据的展示文本
-        value: 'id' // 所有配置类数据的值
+        showPleaseSel: false // 不显示select的【请选择】选项
     },
     colProps: {
         span: 8
@@ -633,31 +625,25 @@ setGlobalConfig({
         bordered: true
     },
     emptyText: '--',
-    logic: {
-        inputRequired: { // 配置一个全局的必填
-            test: true,
-            item: {
-                options: {
-                    rules: [
-                        {
-                            required: true,
-                            message: '请输入'
-                        }
-                    ]
-                }
+    extends: {
+        inputRequired: {
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入'
+                    }
+                ]
             }
         },
-        selectRequired: {  // 配置一个全局的必选
-            test: true,
-            item: {
-                options: {
-                    rules: [
-                        {
-                            required: true,
-                            message: '请选择'
-                        }
-                    ]
-                }
+        selectRequired: {
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '请选择'
+                    }
+                ]
             }
         }
     },
@@ -684,9 +670,7 @@ setGlobalConfig({
 
 ### register(type, Component)
 
-* 注册自定义类型组件
-
-* Antd 3表单使用Class component，如果开发hooks表单组件嵌入到Form中，需要forwardref。注册组件会自动判断当前类型进行forwardRef
+注册自定义类型组件
 
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- |
@@ -695,14 +679,14 @@ setGlobalConfig({
 
 ### unregister(type)
 
-取消已注册自定义类型组件
+取消已注册自定义组件
 
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- |
 | type | 组件名称 | String | '' | 是 |
 
 ```jsx
-import { register, unregister } from 'item-generator';
+import { register, unregister } from 'item-generator4';
 
 // 注册组件
 register('city', City);
@@ -713,23 +697,34 @@ unregister('city');
 
 ### 自定义组件渲染
 
-* <strong>自定义组件会自动注入当前表单form对象、当前表单状态status</strong>
+* <strong>自定义组件会自动注入当前表单状态status 以及 当前item配置的props对象</strong>
 
 ```jsx
-import { register, unregister } from 'item-generator';
+import { register, unregister } from 'item-generator4';
 
 // 注册组件
 register('city', City);
 
 // 渲染时候，会自动注入属性：
-<City form={form} status={0|1} 自定义的props />
+<City status={0|1} 自定义的props />
 ```
+
+### rebuildForm(form)
+
+* 解决antd 3升级4后，string类型a.b.c此类id数据获取转换问题
+
+* 返回抹平数据的getFieldsValues方法，替代form.getFieldsValue
+
+* 具体原因，查看<a href="#3升级4数据获取问题">3升级4数据获取问题</a>
+
+| 参数名 | 说明 | 类型 | 默认值 | 必需 |
+| -------- | ----------- | ---- | ------- | --------- |
+| form | antd表单对象实例 | object | - | 是 |
 
 ## API
 
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- |
-| form | antd表单对象实例 | object | - | 是 |
 | options | 表单项配置，具体参考<a href="#Options">Options</a> | object | - | 是 |
 
 ### Options
@@ -737,52 +732,52 @@ register('city', City);
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- |
 | status | 表单状态（0：查看态，1：编辑态） | number | 1 | 否 |
-| data | 表单初始化数据 | object | {} | 否 |
-| colProps | colable为true，则应用此配置（属性参考<a href="https://3x.ant.design/components/grid-cn/#Col" target="_blank">Col</a>） | object | {} | 否 |
-| formItemProps | 局部表单Item属性（属性参考<a href="https://3x.ant.design/components/form-cn/#Form.Item" target="_blank">Form.Item</a>） | object | {} | 否 |
-| descriptionsProps | 查看状态下，描述列表配置（属性参考<a href="https://3x.ant.design/components/descriptions-cn/#Descriptions" target="_blank">Descriptions</a>） | object | {}| 否 |
+| data | 表单初始化数据，支持'a.b.c', ['a','b','c'], 'a'情况的数据处理 | object | {} | 否 |
+| colProps | colable为true，则应用此配置（属性参考<a href="https://ant.design/components/grid-cn/#Col" target="_blank">Col</a>） | object | {} | 否 |
+| descriptionsProps | 查看状态下，描述列表配置（属性参考<a href="https://ant.design/components/descriptions-cn/#Descriptions" target="_blank">Descriptions</a>） | object | {}| 否 |
 | colable | 是否以Col封装 | boolean | false | 否 |
 | config | 表单项配置，具体参考<a href="#Config">Config</a> | array | [] | 是 |
 | logic | 局部级联规则配置 | {key: Logic| Logic[]} | {} | 否 |
-| extends | 局部继承规则配置，具体参考<a href="#Config" | Object | {} | 否 |
+| extends | 局部继承规则配置 | Object | {} | 否 |
 
 ### Config
 
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- | ---------- |
 | show | 是否展示 | boolean | true | 否 |
-| colProps | colable为true，则应用此配置（属性参考<a href="https://3x.ant.design/components/grid-cn/#Col" target="_blank">Col</a>） | object | {} | 否 |
-| formItemProps | 表单Item属性（属性参考<a href="https://3x.ant.design/components/form-cn/#Form.Item" target="_blank">Form.Item</a>） | object | {} | 否 |
+| colProps | colable为true，则应用此配置（属性参考<a href="https://ant.design/components/grid-cn/#Col" target="_blank">Col</a>） | object | {} | 否 |
+| formItemProps | 表单Item属性（属性参考<a href="https://ant.design/components/form-cn/#Form.Item" target="_blank">Form.Item</a>） | object | {} | 否 |
 | item | 表单元素配置，具体参考<a href="#Item">Item</a> | object | - | 是 |
 | logic | 表单级联配置方案，具体参考<a href="#Logic">Logic</a> | string/Logic/(string/Logic)[] | '' | 否 |
-| extends | 表单继承属性配置，具体参考<a href="#Config" | string/string[] | '' | 否 |
+| extends | 表单继承属性配置 | string/string[] | '' | 否 |
 
 #### Item
 
 | 参数名 | 说明 | 类型 | 默认值 | 必需 |
 | -------- | ----------- | ---- | ------- | --------- | ---------- |
-| id | 表单项ID | string | - | 否 |
+| id | 表单项ID | string/number/string[]/number[] | - | 否 |
 | label | 表单label | ReactNode | '' | 否 |
 | name | 表单名称。<a href="#常见问题">为何提供name配置？</a> | string | '' | 否 |
-| type | 表单类型（<strong className="red">忽略大小写</strong>）。现有类型：<div>text/hidden/input.trim/password/select/treeselect/number</div><div>textarea/textarea.trim/switch/slider/checkbox/checkboxgroup</div><div>radio/radiogroup/radiogroupbutton/rangepicker/yearpicker</div><div>cascader/datepicker/weekpicker/monthpicker/timepicker</div><div>html/suggest</div> | string | input.trim | 否 |
-| options | 表单包装配置（属性参考：<a href="https://3x.ant.design/components/form-cn/#getFieldDecorator(id,-options)-%E5%8F%82%E6%95%B0" target="_blank">getFieldDecorator</a>）| object | {} | 否 |
-| props | 表单元素属性，类似<a href="https://3x.ant.design/components/select-cn/#Select-props" target="_blank">Select</a>。 | object | {} | 否 |
-| descriptionProps | 查看态元素样式（属性参考：<a href="https://3x.ant.design/components/descriptions-cn/#DescriptionItem" target="_blank">DescriptionItem</a>）| object | {} | 否 |
+| type | 表单类型（<strong className="red">忽略大小写</strong>）。现有类型：<div>text/hidden/input.trim/password/select/treeselect/number</div><div>textarea/textarea.trim/switch/slider/checkbox/checkboxgroup</div><div>radio/radiogroup/radiogroupbutton/rangepicker/yearpicker</div><div>cascader/datepicker/weekpicker/monthpicker/timepicker</div><div>html/suggest/rate</div> | string | input.trim | 否 |
+| props | 表单元素属性，类似<a href="https://ant.design/components/select-cn/#Select-props" target="_blank">Select</a>。 | object | {} | 否 |
+| descriptionProps | 查看态元素样式（属性参考：<a href="https://ant.design/components/descriptions-cn/#DescriptionItem" target="_blank">DescriptionItem</a>）| object | {} | 否 |
 | template | 自定义渲染模板，如果未设置则默认为input.trim类型 | <div>ReactNode</div><div>string（html类型建议传递类型为string类型）</div>| null | 否 |
 | data | Select/TreeSelect/Suggest/Checkbox/Radio/Cascader下拉配置数据 | array | [] | 否 |
-| params | 方法调用参数，在select/checkboxgroup/radiogroup/cascader场景下可能需要 | object | {} | 否 |
+| params | 方法调用参数<div>select/treeselect/checkboxgroup/radiogroup/cascader/treeselect</div>场景下可能需要 | object | {} | 否 |
 | emptyText | 查看状态下空值(undefined/null/'')的处理 | string | '无' | 否 |
-| formable | 是否以表单getFieldDecorator包装 | boolean | true | 否 |
+| formable | 是否是表单元素 | boolean | true | 否 |
 
 ## 表单级联方案
+
+Antd 4版本，表单局部更新方式，因此需要依赖某字段需要更新的时候，需要FormItem配置dependencies属性
 
 * 表单级联方案，根据规则应用所对应的配置
 
 * 合并时，如果是数组类型，则浅拷贝进行覆盖；如果非数组，则进行深拷贝合并
 
-* 同时满足多条规则时，从后到前进行拷贝，规则越靠前，配置越优先
+* 同时满足多条规则时，从后到前进行拷贝，<strong className="red">规则越靠前，配置越优先</strong>
 
-* 字段级联时，如果是字符串模板，需要提供占位符 {XXX}。 比如： '{aa} == 1' 会自动根据aa字段的值来解析，然后执行表达式
+* 字段级联时，如果是<strong className="red">字符串模板，需要提供占位符 {XXX}</strong>。 比如： '{aa} == 1' 会自动根据aa字段的值来解析，然后执行表达式
 
 ### Logic
 
@@ -797,7 +792,7 @@ register('city', City);
 | -------- | ----------- | ---- | ------- | --------- | ---------- |
 | label | options中label属性key | string | 'value' | 否 |
 | value | options中value属性key | string | 'id' | 否 |
-| shouldOptionDisabled | 选项是否为disabled，参数名当前数据项value | function | (value, 当前option, 当前配置数组数据) => false  | 否 |
+| shouldOptionDisabled | 选项是否为disabled，参数名当前数据项value | function | (value, 当前option, 当前配置数组数据) => false | 否 |
 
 
 ### Select.Params
@@ -806,7 +801,7 @@ register('city', City);
 | -------- | ----------- | ---- | ------- | --------- | ---------- |
 | showTooltip | 是否以tooltip包装 | boolean | false | 否 |
 | tooltip | tooltip字段，如果showTooltip为true，则取此配置字段key作为tooltip内容 | boolean | 'remark' | 否 |
-| tooltipProps | tooltip属性，具体参考<a href="https://3x.ant.design/components/tooltip-cn/#API" target="_blank">Tooltip</a>。 | Object | false | 否 |
+| tooltipProps | tooltip属性，具体参考<a href="https://ant.design/components/tooltip-cn/#API" target="_blank">Tooltip</a>。 | Object | false | 否 |
 | showPleaseSel | 是否展示【请选择】选项 | boolean | true | 否 |
 | pleaseSelValue | 【请选择】选项的值配置 | string/number | '' | 否 |
 | initText | 默认placeholder | string | '请选择' | 否 | 
@@ -831,4 +826,15 @@ register('city', City);
 *  一般后端为了方便维护，会使用单model维护，所以在新增/编辑/查看状态配置的id需要不同。
 *  id属性主要为了元素的id设置，所以此处设置name属性来进行查看状态字段取值处理。
 *  如果表单状态为查看态，默认取name属性，否则取id属性。即：name > id优先级。
-```
+
+### 3升级4数据获取问题
+
+* 3版本表单元素id类型为string，也会出现深层次id，如: user.0.name, user.0.age此类id名称。
+
+* 3中会自动将此类id的值，转换为user: [{name, age}]此类结构。
+
+* 4中如果id为user.0.name, user.0.age，获取到的value则为 {user.0.name, user.0.age}不会做深层次数据的转换（如果需要转换，id修改为['user', '0', 'age']）此类
+
+* 因此3升级4后已有项目需要进行改造来处理此类id数据。
+
+* ItemGenerator提供了rebuildForm方法来做此数据的处理。
