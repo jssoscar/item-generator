@@ -30,9 +30,10 @@ const {
  * @param value ： 值
  * @returns
  */
-export const getInitialValue = (id, data, type?) => {
+export const getInitialValue = (id, data = {}, type?) => {
+    data = data || {};
     // 数据为{a: {b: {c : 1}}}，id为：a.b.c场景的处理
-    let initialValue = get(data || {}, id);
+    let initialValue = get(data, id);
 
     if (initialValue == undefined) {
         const getMiddleId = (id) => {
