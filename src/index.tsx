@@ -10,7 +10,6 @@ import ItemProps from './components/ItemProps';
 import EditableItem from './components/EditableItem';
 import { isView } from './components/const';
 import ViewItem from './components/ViewItem';
-import { extend } from './utils/logic';
 
 export default (props: ItemProps) => {
     const {
@@ -29,7 +28,7 @@ export default (props: ItemProps) => {
         return null;
     }
 
-    let middleConfig = extend(true, [], config);
+    let middleConfig = config;
 
     // 查看页面，使用查看组件
     if (isView(status)) {
