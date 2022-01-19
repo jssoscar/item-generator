@@ -188,8 +188,7 @@ const transformReg = (data: Config) => {
  * @param data ： 当前表单元素配置
  * @param options ： 表单配置
  */
-const transformExtends = (val: Config, options: Options) => {
-    let data = extend(true, {}, val);
+const transformExtends = (data: Config, options: Options) => {
     const globalConfig = getGlobalConfig();
     const { extends: baseExtends = {} } = globalConfig;
 
@@ -198,7 +197,7 @@ const transformExtends = (val: Config, options: Options) => {
         const middleExetends = Array.isArray(data.extends) ? data.extends : [data.extends];
         middleExetends.forEach((cur) => {
             const config = extend(true, {}, (baseExtends || {})[cur], (options.extends || {})[cur]);
-            data = extend(true, {}, config, data);
+            data = extend(true, config, data);
         });
     }
     return data;

@@ -3,6 +3,10 @@
 
 ## Changelog
 
+### 0.8.9
+
+-   修复自定义template组件被销毁重建的bug
+
 ### 0.8.8
 
 -   数据绑定处理：修复initialValue处理缺少数据兜底的bug

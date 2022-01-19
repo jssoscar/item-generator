@@ -10,7 +10,7 @@ import ItemProps from './components/ItemProps';
 import EditableItem from './components/EditableItem';
 import { isView } from './components/const';
 import ViewItem from './components/ViewItem';
-import { transformConfig, extend } from './utils/logic';
+import { transformConfig } from './utils/logic';
 
 class ItemGenerator extends PureComponent<ItemProps> {
     static defaultProps = {
@@ -32,7 +32,7 @@ class ItemGenerator extends PureComponent<ItemProps> {
         }
 
         const viewStatus = isView(status);
-        let middleConfig = extend(true, [], config);
+        let middleConfig = config;
 
         // 编辑态： 处理级联逻辑
         if (!viewStatus) {
